@@ -238,7 +238,14 @@ export default function ExhibitionLayout() {
 
           {centerViewMode === '3d' ? (
             <div className="flex-1 min-h-0">
-              <VirtualMuseumGame />
+              <VirtualMuseumGame 
+                onSwitchToBooks={() => setCenterViewMode('books')}
+                onSwitchToTimeline={() => {
+                  setActiveTab('hanh-trinh');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onOpenChat={() => setIsChatOpen(true)}
+              />
             </div>
           ) : centerViewMode === 'books' ? (
             <div className="flex-1 min-h-0 bg-slate-950/40 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col h-full overflow-y-auto">

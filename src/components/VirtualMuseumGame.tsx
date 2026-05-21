@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import * as THREE from 'three';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ZoomIn, 
@@ -44,6 +45,82 @@ interface VirtualMuseumGameProps {
   onOpenChat?: () => void;
 }
 
+// List of high-fidelity replica cabinets
+const cabinets: Cabinet[] = [
+  {
+    id: 'cab-trung-tam',
+    name: 'Di sản tượng đồng chân dung Bác',
+    category: 'Tượng thờ & Ảnh tư liệu',
+    type: 'relic',
+    description: 'Cụm tủ lớn trung tâm trang trọng trưng bày các bức tượng chân dung bằng đồng tạc họa dung mạo hiền từ, dũng cảm của Chủ tịch Hồ Chí Minh tại các thời điểm lịch sử khác nhau, kèm các khung hình tư liệu gốc ghi lại hành trạng cách mạng hiển hách của Người.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Pr%C3%A9sident_Ho-chi-Minh_lit_la_Proclamation-d%27ind%C3%A9pendance_sur_la_place_Ba-dinh_le_2nd_Sep_1945.jpg',
+    year: 'Thế kỷ XX (Đúc nghệ thuật phục dựng)',
+    source: 'Khu Di tích Chủ tịch Hồ Chí Minh tại Phủ Chủ tịch',
+    dimensions: 'Tượng đồng đặc tả tỷ lệ 1:1, bệ đỡ lập thể gỗ đặc',
+    details: [
+      'Bao gồm 3 bộ tượng bán thân đúc đồng đỏ nguyên chất bền bỉ.',
+      'Chi tiết đặc tả nếp trán cao biểu trưng cho trí tuệ sáng láng của vĩ nhân.',
+      'Kèm bản thảo gốc Tuyên ngôn Độc lập đọc ngày 2/9/1945.'
+    ],
+    xrayNote: 'Quét X-Ray mật độ kim loại đồng đều, không phát hiện rỗ khí bên trong thớ vật liệu, kỹ thuật đúc sáp ong truyền thống đạt độ tinh xảo cực cao.',
+    infraNote: 'Bản đồ nhiệt độ bề mặt ổn định 24°C, bảo quản dưới kính chân không kiểm soát ẩm độ tối đa dưới 45%.'
+  },
+  {
+    id: 'cab-doc-bvat',
+    name: 'Kỷ vật viết lách & Sách báo di sản',
+    category: 'Kỷ vật thiêng liêng',
+    type: 'relic',
+    description: 'Tủ kính đặt trưng bày trân quý các kỷ vật sinh thời gắn liền với hoạt động cứu nước vĩ đại và sự nghiệp báo chí chí công vô tư của Người: sách nghiên cứu chủ nghĩa yêu nước tự do, chiếc bút máy mực xanh thanh tao Bác ký những sắc lệnh lập quốc tối khẩn, và bộ trang phục kaki dung dị trường tồn.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Ho_Chi_Minh_1946.jpg',
+    year: '1945 - 1969',
+    source: 'Bảo tàng Lịch sử Quốc gia Việt Nam',
+    dimensions: 'Bút máy kim loại 14cm, Sách báo in thạch bản xưa',
+    details: [
+      'Bút máy Parker ngòi vàng có khắc chữ tượng trưng cho ý chí cách mạng.',
+      'Bản thảo báo Thanh niên viết bằng tay sắc nét từng đường nét mực sắc sảo.',
+      'Tủ kín phun khí Nitơ khô khử trùng chống phân rã xơ cen-lu-lô.'
+    ],
+    xrayNote: 'Cơ cấu bơm xi-phông bình mực bút máy vẫn hoạt động nguyên vẹn, lò xo bằng thép không gỉ giữ nguyên tính đàn hồi gốc sau hơn 70 năm.',
+    infraNote: 'Phát hiện tỳ vết hấp thụ quang phổ hồng ngoại ở nếp gấp sách báo biểu thị vết ố tự nhiên theo thời gian, chứng thực nguồn gốc cổ sử đích thực.'
+  },
+  {
+    id: 'cab-dep-cao-su',
+    name: 'Kỷ vật đôi dép cao su lịch sử',
+    category: 'Đời sống thường nhật',
+    type: 'daily',
+    description: 'Đôi dép cao su huyền thoại được chế tác thủ công từ chiếc lốp xe máy bay của thực dân bị quân ta thu giữ trong chiến dịch Thu Đông năm 1947 tại Việt Bắc. Đôi dép dung dị gắn bó trung kiên theo gót chân Người trên vạn dặm hành quân sương gió.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Ho_Chi_Minh%27s_House_on_stilts.jpg',
+    year: 'Chế tạo từ năm 1947',
+    source: 'Nhà sàn Phủ Chủ tịch',
+    dimensions: 'Chất liệu cao su lưu hóa, quai bản ròng chống trượt',
+    details: [
+      'Được cắt thủ công từ lốp lính chiến lợi phẩm dẻo dai phi thường.',
+      'Hệ thống quai ôm khít chắc chắn vững chãi qua đầm lầy, vách đá.',
+      'Kỷ vật bất tử hóa lối sống tối giản bậc thầy của Chủ tịch nước.'
+    ],
+    xrayNote: 'Mật độ các lớp xơ thép dệt bên trong cốt lốp xe quân sự đạt độ liên kết dẻo 100%, bảo vệ dép tuyệt đối khỏi xé rách.',
+    infraNote: 'Hồng ngoại quét cho thấy độ ẩm sợi xơ tự nhiên trong lòng dép cực thấp, các quai gài còn nguyên độ co giãn chịu lực.'
+  },
+  {
+    id: 'cab-nhat-ky-trong-tu',
+    name: 'Di cảo Nhật ký trong tù',
+    category: 'Áng văn cách mạng vĩ đại',
+    type: 'book',
+    description: 'Tập thơ chữ Hán ngục trung nhật ký (Nhật ký trong tù) gồm 133 bài thơ hào sảng viết trong suốt những tháng ngày bị chính quyền Tưởng Giới Thạch giam giữ vô cớ tại các nhà lao Quảng Tây từ năm 1942 đến 1943. Áng văn thể hiện cốt cách thi nhân phi thường bất khuất của Người.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Ho_Chi_Minh_1946.jpg',
+    year: '1942 - 1943 (Bản thảo viết tay gốc)',
+    source: 'Bảo tàng Cách mạng Việt Nam',
+    dimensions: 'Tập giấy bản tay đóng gáy chỉ thô cổ điển',
+    details: [
+      'Bản chép tay chữ Hán có nhiều tranh vẽ phác thảo nhỏ của Bác.',
+      'Được chứng nhận là Bảo vật Quốc Gia tối thượng của dân tộc.',
+      'Được lưu giữ trong tủ gia nhiệt vi mô thông minh kiểm soát độ ẩm 35%.'
+    ],
+    xrayNote: 'Sự phân bố mực muội than cổ của Trung Hoa trên thớ giấy bản lọt thấu mịn màng, dệt gáy sách thô bằng xơ đay bền chắc tuyệt hảo.',
+    infraNote: 'Bước sóng hồng ngoại bắt trọn dấu mờ các nét vẽ chìm nhạt từng bị mài đè bên dưới trang giấy tả thực cảnh xích xiềng bóng tối lao tù khốc liệt.'
+  }
+];
+
 export default function VirtualMuseumGame({ onSwitchToBooks, onSwitchToTimeline, onOpenChat }: VirtualMuseumGameProps) {
   const [selectedCabinet, setSelectedCabinet] = useState<Cabinet | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -73,6 +150,552 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onSwitchToTimeline,
   // Room Mode state
   const [isRoomMode, setIsRoomMode] = useState<boolean>(true);
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (!isRoomMode) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Get parent element size
+    let width = canvas.parentElement?.clientWidth || canvas.clientWidth || 800;
+    let height = canvas.parentElement?.clientHeight || canvas.clientHeight || 500;
+
+    // Setup Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true,
+      alpha: true
+    });
+    renderer.setPixelRatio(Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2));
+    renderer.setSize(width, height, false);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // Setup Scene
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x030712, 0.04);
+
+    // Setup Camera
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.set(0, 5, 14);
+
+    // Setup Lighting
+    const ambientLight = new THREE.AmbientLight(0xfffbeb, 0.6);
+    scene.add(ambientLight);
+
+    // Spotlight on Central Altar
+    const centerSpot = new THREE.SpotLight(0xfabf24, 80, 20, Math.PI / 4, 0.8, 1);
+    centerSpot.position.set(0, 7, -1);
+    centerSpot.castShadow = true;
+    centerSpot.shadow.bias = -0.001;
+    scene.add(centerSpot);
+
+    // Soft Blue back ambient aura
+    const backLight = new THREE.DirectionalLight(0x1e3a8a, 1.2);
+    backLight.position.set(0, 2, -8);
+    scene.add(backLight);
+
+    // Floor Grid Helper
+    const gridHelper = new THREE.GridHelper(30, 20, 0xf59e0b, 0x1e293b);
+    gridHelper.position.y = 0.01;
+    // @ts-ignore
+    gridHelper.material.opacity = 0.22;
+    // @ts-ignore
+    gridHelper.material.transparent = true;
+    scene.add(gridHelper);
+
+    // Floor Mesh (Polished wood floor reflection simulator)
+    const floorGeo = new THREE.PlaneGeometry(30, 20);
+    const floorMat = new THREE.MeshStandardMaterial({
+      color: 0x0a0f1d,
+      roughness: 0.25,
+      metalness: 0.1
+    });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // Back Wall
+    const wallGeo = new THREE.PlaneGeometry(30, 10);
+    const wallMat = new THREE.MeshStandardMaterial({
+      color: 0x05070e,
+      roughness: 0.9,
+      metalness: 0.1
+    });
+    const backWall = new THREE.Mesh(wallGeo, wallMat);
+    backWall.position.set(0, 5, -8);
+    backWall.receiveShadow = true;
+    scene.add(backWall);
+
+    // Wooden Columns (Pilasters)
+    const colGeo = new THREE.CylinderGeometry(0.12, 0.12, 10, 16);
+    const colMat = new THREE.MeshStandardMaterial({
+      color: 0x3b2314, // Deep mahogany wood
+      roughness: 0.4,
+      metalness: 0.1
+    });
+    const colPositionsX = [-10, -4, 4, 10];
+    colPositionsX.forEach(x => {
+      const col = new THREE.Mesh(colGeo, colMat);
+      col.position.set(x, 5, -7.9);
+      col.castShadow = true;
+      scene.add(col);
+    });
+
+    // Wall Plaque Frame
+    const plaqueGeo = new THREE.BoxGeometry(6, 1.6, 0.1);
+    const plaqueMat = new THREE.MeshStandardMaterial({
+      color: 0x1e150f,
+      roughness: 0.5,
+      metalness: 0.9
+    });
+    const wallPlaque = new THREE.Mesh(plaqueGeo, plaqueMat);
+    wallPlaque.position.set(0, 6.8, -7.8);
+    scene.add(wallPlaque);
+
+    // Golden trim on Plaque
+    const borderGeo = new THREE.BoxGeometry(6.1, 1.7, 0.05);
+    const borderMat = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b,
+      roughness: 0.2,
+      metalness: 0.9
+    });
+    const border = new THREE.Mesh(borderGeo, borderMat);
+    border.position.set(0, 6.8, -7.83);
+    scene.add(border);
+
+    // Store interactive objects
+    const interactiveObjects: THREE.Object3D[] = [];
+
+    // --- Exhibit 1: Central Bust Pedestal + Holographic Bust (cab-trung-tam) ---
+    const centerPedGeo = new THREE.CylinderGeometry(1.0, 1.1, 2.0, 32);
+    const stoneMat = new THREE.MeshStandardMaterial({
+      color: 0x1e293b,
+      roughness: 0.15,
+      metalness: 0.8
+    });
+    const centerPed = new THREE.Mesh(centerPedGeo, stoneMat);
+    centerPed.position.set(0, 1.0, -1);
+    centerPed.castShadow = true;
+    centerPed.receiveShadow = true;
+    centerPed.userData = { id: 'cab-trung-tam', type: 'exhibit' };
+    scene.add(centerPed);
+    interactiveObjects.push(centerPed);
+
+    const bronzeMat = new THREE.MeshStandardMaterial({
+      color: 0xd97706, // Polished copper
+      roughness: 0.12,
+      metalness: 0.95
+    });
+
+    const statueGroup = new THREE.Group();
+    statueGroup.position.set(0, 2.2, -1);
+
+    // Shoulders
+    const shouldersGeo = new THREE.CylinderGeometry(0.35, 0.7, 0.5, 16);
+    const shoulders = new THREE.Mesh(shouldersGeo, bronzeMat);
+    shoulders.castShadow = true;
+    statueGroup.add(shoulders);
+
+    // Neck
+    const neckGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.25, 16);
+    const neck = new THREE.Mesh(neckGeo, bronzeMat);
+    neck.position.y = 0.35;
+    statueGroup.add(neck);
+
+    // Head
+    const headGeo = new THREE.SphereGeometry(0.32, 32, 32);
+    const head = new THREE.Mesh(headGeo, bronzeMat);
+    head.position.y = 0.65;
+    head.castShadow = true;
+    statueGroup.add(head);
+
+    // Beard
+    const beardGeo = new THREE.ConeGeometry(0.1, 0.35, 16);
+    beardGeo.rotateX(Math.PI / 8);
+    const beardMat = new THREE.MeshStandardMaterial({
+      color: 0xfef08a,
+      roughness: 0.3,
+      metalness: 0.95
+    });
+    const beard = new THREE.Mesh(beardGeo, beardMat);
+    beard.position.set(0, 0.4, 0.2);
+    statueGroup.add(beard);
+
+    // Aura ring below
+    const ringGeo = new THREE.RingGeometry(0.7, 0.8, 32);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0xf59e0b,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.6
+    });
+    const auraRing = new THREE.Mesh(ringGeo, ringMat);
+    auraRing.rotation.x = Math.PI / 2;
+    auraRing.position.y = -0.18;
+    statueGroup.add(auraRing);
+
+    scene.add(statueGroup);
+
+    shoulders.userData = { id: 'cab-trung-tam', type: 'exhibit' };
+    head.userData = { id: 'cab-trung-tam', type: 'exhibit' };
+    interactiveObjects.push(shoulders, head);
+
+    // --- Exhibit 2: Fountain Pen and Books Case (cab-doc-bvat) ---
+    const sidePedGeo = new THREE.BoxGeometry(1.4, 1.5, 1.0);
+    const sidePedMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.3,
+      metalness: 0.85
+    });
+    const leftPed = new THREE.Mesh(sidePedGeo, sidePedMat);
+    leftPed.position.set(-4, 0.75, -2);
+    leftPed.castShadow = true;
+    leftPed.receiveShadow = true;
+    leftPed.userData = { id: 'cab-doc-bvat', type: 'exhibit' };
+    scene.add(leftPed);
+    interactiveObjects.push(leftPed);
+
+    const glassGeo = new THREE.BoxGeometry(1.3, 0.7, 0.9);
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: 0x0891b2, // Cyan tint glass
+      transparent: true,
+      opacity: 0.22,
+      roughness: 0.1,
+      metalness: 0.9
+    });
+    const leftGlass = new THREE.Mesh(glassGeo, glassMat);
+    leftGlass.position.set(-4, 1.85, -2);
+    scene.add(leftGlass);
+
+    // The Pen
+    const penGeo = new THREE.CylinderGeometry(0.03, 0.03, 0.55, 8);
+    penGeo.rotateZ(Math.PI / 4.5);
+    const pen = new THREE.Mesh(penGeo, bronzeMat);
+    pen.position.set(-4, 1.75, -2);
+    scene.add(pen);
+
+    // --- Exhibit 3: Rubber Sandals Case (cab-dep-cao-su) ---
+    const rightPed = new THREE.Mesh(sidePedGeo, sidePedMat);
+    rightPed.position.set(4, 0.75, -2);
+    rightPed.castShadow = true;
+    rightPed.receiveShadow = true;
+    rightPed.userData = { id: 'cab-dep-cao-su', type: 'exhibit' };
+    scene.add(rightPed);
+    interactiveObjects.push(rightPed);
+
+    const rightGlass = new THREE.Mesh(glassGeo, glassMat);
+    rightGlass.position.set(4, 1.85, -2);
+    scene.add(rightGlass);
+
+    // Sandals (two flat blocks)
+    const soleGeo = new THREE.BoxGeometry(0.2, 0.02, 0.42);
+    const rubberMat = new THREE.MeshStandardMaterial({
+      color: 0x111827, // Rubber matte black
+      roughness: 0.8,
+      metalness: 0.1
+    });
+    const leftSole = new THREE.Mesh(soleGeo, rubberMat);
+    leftSole.position.set(3.85, 1.55, -2.0);
+    leftSole.rotation.y = -Math.PI / 10;
+    scene.add(leftSole);
+
+    const rightSole = new THREE.Mesh(soleGeo, rubberMat);
+    rightSole.position.set(4.15, 1.55, -2.0);
+    rightSole.rotation.y = Math.PI / 10;
+    scene.add(rightSole);
+
+    // --- Exhibit 4: Prison Diary Slanted Stand (cab-nhat-ky-trong-tu) ---
+    const diaryStandGeo = new THREE.BoxGeometry(1.0, 1.3, 0.7);
+    const diaryStand = new THREE.Mesh(diaryStandGeo, colMat);
+    diaryStand.position.set(-2.5, 0.65, 1.5);
+    diaryStand.castShadow = true;
+    diaryStand.receiveShadow = true;
+    diaryStand.userData = { id: 'cab-nhat-ky-trong-tu', type: 'exhibit' };
+    scene.add(diaryStand);
+    interactiveObjects.push(diaryStand);
+
+    const bookGeo = new THREE.BoxGeometry(0.7, 0.08, 0.5);
+    const bookMat = new THREE.MeshStandardMaterial({
+      color: 0xfef3c7, // Aged paper
+      roughness: 0.65,
+      metalness: 0.1
+    });
+    const book = new THREE.Mesh(bookGeo, bookMat);
+    book.position.set(-2.5, 1.35, 1.5);
+    book.rotation.x = -Math.PI / 6;
+    scene.add(book);
+
+    // --- Portal 5: Revolution Bookcase (portal-books) ---
+    const frameGeo = new THREE.BoxGeometry(1.2, 5.0, 2.2);
+    const leftFrame = new THREE.Mesh(frameGeo, colMat);
+    leftFrame.position.set(-8.5, 2.5, -4.5);
+    leftFrame.castShadow = true;
+    leftFrame.receiveShadow = true;
+    leftFrame.userData = { id: 'portal-books', type: 'portal' };
+    scene.add(leftFrame);
+    interactiveObjects.push(leftFrame);
+
+    const leftBooksPanelGeo = new THREE.BoxGeometry(1.0, 4.2, 1.9);
+    const amberGlowMat = new THREE.MeshStandardMaterial({
+      color: 0xd97706,
+      emissive: 0xd97706,
+      emissiveIntensity: 0.25,
+      roughness: 0.2
+    });
+    const leftBooksPanel = new THREE.Mesh(leftBooksPanelGeo, amberGlowMat);
+    leftBooksPanel.position.set(-8.4, 2.5, -4.5);
+    leftBooksPanel.userData = { id: 'portal-books', type: 'portal' };
+    scene.add(leftBooksPanel);
+    interactiveObjects.push(leftBooksPanel);
+
+    // --- Portal 6: Timeline Wall Screen (portal-timeline) ---
+    const bezelGeo = new THREE.BoxGeometry(1.2, 3.6, 3.0);
+    const rightBezel = new THREE.Mesh(bezelGeo, sidePedMat);
+    rightBezel.position.set(8.5, 2.2, -4.5);
+    rightBezel.castShadow = true;
+    rightBezel.receiveShadow = true;
+    rightBezel.userData = { id: 'portal-timeline', type: 'portal' };
+    scene.add(rightBezel);
+    interactiveObjects.push(rightBezel);
+
+    const rightDisplayGeo = new THREE.BoxGeometry(1.0, 3.3, 2.7);
+    const rightDisplayMat = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b,
+      emissive: 0xf59e0b,
+      emissiveIntensity: 0.3,
+      roughness: 0.1
+    });
+    const rightDisplay = new THREE.Mesh(rightDisplayGeo, rightDisplayMat);
+    rightDisplay.position.set(8.4, 2.2, -4.5);
+    rightDisplay.userData = { id: 'portal-timeline', type: 'portal' };
+    scene.add(rightDisplay);
+    interactiveObjects.push(rightDisplay);
+
+    // --- Portal 7: Virtual Assistant Desk (portal-chat) ---
+    const deskGeo = new THREE.BoxGeometry(1.3, 1.1, 1.3);
+    const desk = new THREE.Mesh(deskGeo, sidePedMat);
+    desk.position.set(2.5, 0.55, 1.5);
+    desk.castShadow = true;
+    desk.receiveShadow = true;
+    desk.userData = { id: 'portal-chat', type: 'portal' };
+    scene.add(desk);
+    interactiveObjects.push(desk);
+
+    const orbGeo = new THREE.SphereGeometry(0.18, 16, 16);
+    const orbMat = new THREE.MeshStandardMaterial({
+      color: 0x10b981, // Emerald green
+      emissive: 0x10b981,
+      emissiveIntensity: 0.7,
+      roughness: 0.1
+    });
+    const assistantOrb = new THREE.Mesh(orbGeo, orbMat);
+    assistantOrb.position.set(2.5, 1.3, 1.5);
+    scene.add(assistantOrb);
+
+    // Interactive Dragging and Swiping math
+    let targetRotX = -Math.PI / 14;
+    let targetRotY = 0;
+    let currRotX = -Math.PI / 14;
+    let currRotY = 0;
+    let dist = 11.5;
+    let targetDist = 11.5;
+
+    let isMouseDown = false;
+    let prevMouseX = 0;
+    let prevMouseY = 0;
+
+    const onMouseDown = (e: MouseEvent) => {
+      isMouseDown = true;
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      updateRaycast(e.clientX, e.clientY);
+      if (!isMouseDown) return;
+
+      const dx = e.clientX - prevMouseX;
+      const dy = e.clientY - prevMouseY;
+
+      targetRotY -= dx * 0.004;
+      targetRotX = Math.max(-Math.PI / 4, Math.min(Math.PI / 18, targetRotX - dy * 0.004));
+
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    };
+
+    const onMouseUp = () => {
+      isMouseDown = false;
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      targetDist = Math.max(6.5, Math.min(18.0, targetDist + e.deltaY * 0.006));
+    };
+
+    // Mobile touch controls
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        isMouseDown = true;
+        prevMouseX = e.touches[0].clientX;
+        prevMouseY = e.touches[0].clientY;
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1 && isMouseDown) {
+        const dx = e.touches[0].clientX - prevMouseX;
+        const dy = e.touches[0].clientY - prevMouseY;
+
+        targetRotY -= dx * 0.007;
+        targetRotX = Math.max(-Math.PI / 4, Math.min(Math.PI / 18, targetRotX - dy * 0.007));
+
+        prevMouseX = e.touches[0].clientX;
+        prevMouseY = e.touches[0].clientY;
+        updateRaycast(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    const onTouchEnd = () => {
+      isMouseDown = false;
+    };
+
+    // Raycast selector
+    const raycaster = new THREE.Raycaster();
+    const mouseVector = new THREE.Vector2();
+
+    const updateRaycast = (clientX: number, clientY: number) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseVector.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouseVector.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouseVector, camera);
+      const intersects = raycaster.intersectObjects(interactiveObjects);
+
+      if (intersects.length > 0) {
+        const hit = intersects[0].object;
+        const id = hit.userData?.id;
+        if (id) {
+          canvas.style.cursor = 'pointer';
+          setHoveredHotspot(id);
+          return;
+        }
+      }
+      canvas.style.cursor = 'default';
+      setHoveredHotspot(null);
+    };
+
+    const onClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseVector.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseVector.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouseVector, camera);
+      const intersects = raycaster.intersectObjects(interactiveObjects);
+
+      if (intersects.length > 0) {
+        const hit = intersects[0].object;
+        const id = hit.userData?.id;
+        const type = hit.userData?.type;
+
+        if (id) {
+          if (type === 'portal') {
+            if (id === 'portal-books' && onSwitchToBooks) {
+              onSwitchToBooks();
+            } else if (id === 'portal-timeline' && onSwitchToTimeline) {
+              onSwitchToTimeline();
+            } else if (id === 'portal-chat' && onOpenChat) {
+              onOpenChat();
+            }
+          } else {
+            const cabinet = cabinets.find(c => c.id === id);
+            if (cabinet) setSelectedCabinet(cabinet);
+          }
+        }
+      }
+    };
+
+    // Add event listeners
+    canvas.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('wheel', onWheel, { passive: false });
+    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: true });
+    canvas.addEventListener('touchend', onTouchEnd);
+    canvas.addEventListener('click', onClick);
+
+    // Resize handler
+    const handleResize = () => {
+      width = canvas.parentElement?.clientWidth || canvas.clientWidth;
+      height = canvas.parentElement?.clientHeight || canvas.clientHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    // Render loop
+    let animationFrameId: number;
+    const animate = () => {
+      animationFrameId = requestAnimationFrame(animate);
+
+      // Smooth interpolation for camera
+      currRotX += (targetRotX - currRotX) * 0.07;
+      currRotY += (targetRotY - currRotY) * 0.07;
+      dist += (targetDist - dist) * 0.07;
+
+      camera.position.x = Math.sin(currRotY) * Math.cos(currRotX) * dist;
+      camera.position.z = Math.cos(currRotY) * Math.cos(currRotX) * dist;
+      camera.position.y = Math.sin(currRotX) * dist + 1.2;
+      camera.lookAt(0, 1.2, -1.0);
+
+      // Micro-animations for 3D elements
+      const time = Date.now();
+      
+      // Pulse statue aura
+      auraRing.rotation.z += 0.008;
+      const pulse = 1.0 + Math.sin(time * 0.002) * 0.06;
+      auraRing.scale.set(pulse, pulse, pulse);
+
+      // Slow floating of relics inside cabinets
+      pen.position.y = 1.75 + Math.sin(time * 0.0015) * 0.02;
+      leftSole.position.y = 1.55 + Math.sin(time * 0.0012) * 0.015;
+      rightSole.position.y = 1.55 + Math.sin(time * 0.0012 + 0.5) * 0.015;
+      book.position.y = 1.35 + Math.sin(time * 0.001) * 0.012;
+      assistantOrb.position.y = 1.3 + Math.sin(time * 0.002) * 0.035;
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    // Clean up
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('resize', handleResize);
+      
+      if (canvas) {
+        canvas.removeEventListener('mousedown', onMouseDown);
+        canvas.removeEventListener('wheel', onWheel);
+        canvas.removeEventListener('touchstart', onTouchStart);
+        canvas.removeEventListener('touchmove', onTouchMove);
+        canvas.removeEventListener('touchend', onTouchEnd);
+        canvas.removeEventListener('click', onClick);
+      }
+
+      // Dispose WebGL resources
+      renderer.dispose();
+      scene.clear();
+    };
+  }, [isRoomMode]);
 
   // Load tribute counts from localStorage if available
   useEffect(() => {
@@ -115,82 +738,6 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onSwitchToTimeline,
       [id]: prev[id] === 'warm' ? 'cool' : 'warm'
     }));
   };
-
-  // List of high-fidelity replica cabinets
-  const cabinets: Cabinet[] = [
-    {
-      id: 'cab-trung-tam',
-      name: 'Di sản tượng đồng chân dung Bác',
-      category: 'Tượng thờ & Ảnh tư liệu',
-      type: 'relic',
-      description: 'Cụm tủ lớn trung tâm trang trọng trưng bày các bức tượng chân dung bằng đồng tạc họa dung mạo hiền từ, dũng cảm của Chủ tịch Hồ Chí Minh tại các thời điểm lịch sử khác nhau, kèm các khung hình tư liệu gốc ghi lại hành trạng cách mạng hiển hách của Người.',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Pr%C3%A9sident_Ho-chi-Minh_lit_la_Proclamation-d%27ind%C3%A9pendance_sur_la_place_Ba-dinh_le_2nd_Sep_1945.jpg',
-      year: 'Thế kỷ XX (Đúc nghệ thuật phục dựng)',
-      source: 'Khu Di tích Chủ tịch Hồ Chí Minh tại Phủ Chủ tịch',
-      dimensions: 'Tượng đồng đặc tả tỷ lệ 1:1, bệ đỡ lập thể gỗ đặc',
-      details: [
-        'Bao gồm 3 bộ tượng bán thân đúc đồng đỏ nguyên chất bền bỉ.',
-        'Chi tiết đặc tả nếp trán cao biểu trưng cho trí tuệ sáng láng của vĩ nhân.',
-        'Kèm bản thảo gốc Tuyên ngôn Độc lập đọc ngày 2/9/1945.'
-      ],
-      xrayNote: 'Quét X-Ray mật độ kim loại đồng đều, không phát hiện rỗ khí bên trong thớ vật liệu, kỹ thuật đúc sáp ong truyền thống đạt độ tinh xảo cực cao.',
-      infraNote: 'Bản đồ nhiệt độ bề mặt ổn định 24°C, bảo quản dưới kính chân không kiểm soát ẩm độ tối đa dưới 45%.'
-    },
-    {
-      id: 'cab-doc-bvat',
-      name: 'Kỷ vật viết lách & Sách báo di sản',
-      category: 'Kỷ vật thiêng liêng',
-      type: 'relic',
-      description: 'Tủ kính đặt trưng bày trân quý các kỷ vật sinh thời gắn liền với hoạt động cứu nước vĩ đại và sự nghiệp báo chí chí công vô tư của Người: sách nghiên cứu chủ nghĩa yêu nước tự do, chiếc bút máy mực xanh thanh tao Bác ký những sắc lệnh lập quốc tối khẩn, và bộ trang phục kaki dung dị trường tồn.',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Ho_Chi_Minh_1946.jpg',
-      year: '1945 - 1969',
-      source: 'Bảo tàng Lịch sử Quốc gia Việt Nam',
-      dimensions: 'Bút máy kim loại 14cm, Sách báo in thạch bản xưa',
-      details: [
-        'Bút máy Parker ngòi vàng có khắc chữ tượng trưng cho ý chí cách mạng.',
-        'Bản thảo báo Thanh niên viết bằng tay sắc nét từng đường nét mực sắc sảo.',
-        'Tủ kín phun khí Nitơ khô khử trùng chống phân rã xơ cen-lu-lô.'
-      ],
-      xrayNote: 'Cơ cấu bơm xi-phông bình mực bút máy vẫn hoạt động nguyên vẹn, lò xo bằng thép không gỉ giữ nguyên tính đàn hồi gốc sau hơn 70 năm.',
-      infraNote: 'Phát hiện tỳ vết hấp thụ quang phổ hồng ngoại ở nếp gấp sách báo biểu thị vết ố tự nhiên theo thời gian, chứng thực nguồn gốc cổ sử đích thực.'
-    },
-    {
-      id: 'cab-dep-cao-su',
-      name: 'Kỷ vật đôi dép cao su lịch sử',
-      category: 'Đời sống thường nhật',
-      type: 'daily',
-      description: 'Đôi dép cao su huyền thoại được chế tác thủ công từ chiếc lốp xe máy bay của thực dân bị quân ta thu giữ trong chiến dịch Thu Đông năm 1947 tại Việt Bắc. Đôi dép dung dị gắn bó trung kiên theo gót chân Người trên vạn dặm hành quân sương gió.',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Ho_Chi_Minh%27s_House_on_stilts.jpg',
-      year: 'Chế tạo từ năm 1947',
-      source: 'Nhà sàn Phủ Chủ tịch',
-      dimensions: 'Chất liệu cao su lưu hóa, quai bản ròng chống trượt',
-      details: [
-        'Được cắt thủ công từ lốp lính chiến lợi phẩm dẻo dai phi thường.',
-        'Hệ thống quai ôm khít chắc chắn vững chãi qua đầm lầy, vách đá.',
-        'Kỷ vật bất tử hóa lối sống tối giản bậc thầy của Chủ tịch nước.'
-      ],
-      xrayNote: 'Mật độ các lớp xơ thép dệt bên trong cốt lốp xe quân sự đạt độ liên kết dẻo 100%, bảo vệ dép tuyệt đối khỏi xé rách.',
-      infraNote: 'Hồng ngoại quét cho thấy độ ẩm sợi xơ tự nhiên trong lòng dép cực thấp, các quai gài còn nguyên độ co giãn chịu lực.'
-    },
-    {
-      id: 'cab-nhat-ky-trong-tu',
-      name: 'Di cảo Nhật ký trong tù',
-      category: 'Áng văn cách mạng vĩ đại',
-      type: 'book',
-      description: 'Tập thơ chữ Hán ngục trung nhật ký (Nhật ký trong tù) gồm 133 bài thơ hào sảng viết trong suốt những tháng ngày bị chính quyền Tưởng Giới Thạch giam giữ vô cớ tại các nhà lao Quảng Tây từ năm 1942 đến 1943. Áng văn thể hiện cốt cách thi nhân phi thường bất khuất của Người.',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Ho_Chi_Minh_1946.jpg',
-      year: '1942 - 1943 (Bản thảo viết tay gốc)',
-      source: 'Bảo tàng Cách mạng Việt Nam',
-      dimensions: 'Tập giấy bản tay đóng gáy chỉ thô cổ điển',
-      details: [
-        'Bản chép tay chữ Hán có nhiều tranh vẽ phác thảo nhỏ của Bác.',
-        'Được chứng nhận là Bảo vật Quốc Gia tối thượng của dân tộc.',
-        'Được lưu giữ trong tủ gia nhiệt vi mô thông minh kiểm soát độ ẩm 35%.'
-      ],
-      xrayNote: 'Sự phân bố mực muội than cổ của Trung Hoa trên thớ giấy bản lọt thấu mịn màng, dệt gáy sách thô bằng xơ đay bền chắc tuyệt hảo.',
-      infraNote: 'Bước sóng hồng ngoại bắt trọn dấu mờ các nét vẽ chìm nhạt từng bị mài đè bên dưới trang giấy tả thực cảnh xích xiềng bóng tối lao tù khốc liệt.'
-    }
-  ];
 
   const filteredCabinets = activeFilter === 'all' 
     ? cabinets 
@@ -258,267 +805,19 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onSwitchToTimeline,
       {isRoomMode ? (
         /* ==================== HIGH-FIDELITY 3D INTERACTIVE ROOM INTERFACE ==================== */
         <div className="relative w-full h-[520px] md:h-[580px] bg-slate-950 overflow-hidden flex flex-col justify-between select-none border-b border-white/5">
-          
-          {/* Ceiling light aura */}
-          <div className="absolute top-0 inset-x-0 h-44 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent pointer-events-none" />
-
-          {/* Majestic ambient ceiling spotlights (SVG gradient projection rays) */}
-          <svg className="absolute top-0 w-full h-[65%] pointer-events-none" viewBox="0 0 1000 350" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="spotlight-gold" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgba(245, 158, 11, 0.25)" />
-                <stop offset="50%" stopColor="rgba(245, 158, 11, 0.08)" />
-                <stop offset="100%" stopColor="rgba(245, 158, 11, 0)" />
-              </linearGradient>
-            </defs>
-            {/* Center Altar Ray */}
-            <polygon points="500,0 420,350 580,350" fill="url(#spotlight-gold)" className="opacity-90" />
-            {/* Left Desk Ray */}
-            <polygon points="290,0 200,350 380,350" fill="url(#spotlight-gold)" className="opacity-40" />
-            {/* Right Pedestal Ray */}
-            <polygon points="710,0 620,350 800,350" fill="url(#spotlight-gold)" className="opacity-40" />
-          </svg>
-
-          {/* Deep museum brick/stone wall layout drawing */}
-          <div className="absolute inset-0 bottom-[35%] bg-gradient-to-b from-[#0a0f1d] via-[#05070e] to-[#0d1222] border-b-[4px] border-amber-500/25 pointer-events-none z-0">
-            {/* Custom elegant mahogany pilasters representing structural columns */}
-            <div className="absolute top-0 bottom-0 left-[10%] w-2 bg-gradient-to-r from-amber-500/5 via-amber-500/20 to-transparent shadow-[0_0_8px_rgba(245,158,11,0.15)]" />
-            <div className="absolute top-0 bottom-0 left-[30%] w-2 bg-gradient-to-r from-amber-500/5 via-amber-500/20 to-transparent shadow-[0_0_8px_rgba(245,158,11,0.15)]" />
-            <div className="absolute top-0 bottom-0 right-[30%] w-2 bg-gradient-to-r from-amber-500/5 via-amber-500/20 to-transparent shadow-[0_0_8px_rgba(245,158,11,0.15)]" />
-            <div className="absolute top-0 bottom-0 right-[10%] w-2 bg-gradient-to-r from-amber-500/5 via-amber-500/20 to-transparent shadow-[0_0_8px_rgba(245,158,11,0.15)]" />
-
-            {/* Commemorative inscription on the wall center */}
-            <div className="absolute top-[8%] left-1/2 -translate-x-1/2 text-center select-none w-full max-w-lg px-4">
-              <h4 className="text-[10px] text-amber-500 font-mono font-extrabold uppercase tracking-[0.4em] mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] animate-pulse">
-                PHÒNG TRIỂN LÃM SỐ HỒ CHÍ MINH
-              </h4>
-              <p className="text-[9px] text-slate-400 font-sans tracking-wide uppercase italic">
-                "Đời đời nhớ ơn Chủ tịch Hồ Chí Minh vĩ đại"
-              </p>
-            </div>
+          {/* Three.js WebGL Canvas */}
+          <div className="absolute inset-0 z-0">
+            <canvas ref={canvasRef} className="w-full h-full block touch-none outline-none" />
           </div>
 
-          {/* Perspective polished wooden floor plan with grid tiling */}
-          <div className="absolute bottom-0 inset-x-0 h-[35%] bg-gradient-to-t from-[#10131d] via-[#05060b] to-[#000000] z-0 overflow-hidden pointer-events-none">
-            {/* Horizontal and vertical perspective grid lines */}
-            <svg className="w-full h-full opacity-35" viewBox="0 0 1000 200" preserveAspectRatio="none">
-              <path d="M 0 200 L 420 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 125 200 L 440 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 250 200 L 480 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 375 200 L 500 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 500 200 L 500 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 625 200 L 500 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 750 200 L 520 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 875 200 L 560 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <path d="M 1000 200 L 580 0" stroke="rgba(245,158,11,0.25)" strokeWidth="1" />
-              <line x1="0" y1="15" x2="1000" y2="15" stroke="rgba(245,158,11,0.15)" strokeWidth="0.8" />
-              <line x1="0" y1="40" x2="1000" y2="40" stroke="rgba(245,158,11,0.15)" strokeWidth="0.8" />
-              <line x1="0" y1="80" x2="1000" y2="80" stroke="rgba(245,158,11,0.15)" strokeWidth="0.8" />
-              <line x1="0" y1="135" x2="1000" y2="135" stroke="rgba(245,158,11,0.15)" strokeWidth="1" />
-            </svg>
-          </div>
-
-          {/* Ambient dust particle lights */}
-          <div className="absolute inset-0 pointer-events-none z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/[0.03] via-transparent to-transparent" />
-
-          {/* ==================== INTERACTIVE HOTSPOT LAYERS ==================== */}
-          <div className="absolute inset-0 z-20">
-            
-            {/* 1. HOTSPOT: Tượng đồng thờ phụng (Pedestal Center) */}
-            <div 
-              className="absolute top-[28%] left-[42%] w-[16%] h-[40%] flex flex-col items-center justify-end cursor-pointer group"
-              onMouseEnter={() => setHoveredHotspot('cab-trung-tam')}
-              onMouseLeave={() => setHoveredHotspot(null)}
-              onClick={() => setSelectedCabinet(cabinets[0])}
-            >
-              {/* Pulsating glowing circular base floor aura */}
-              <div className="w-16 h-4 rounded-full bg-amber-500/20 group-hover:bg-amber-400/40 blur-sm duration-300 absolute -bottom-1" />
-              <div className="w-10 h-3 rounded-full border border-amber-500/50 group-hover:border-amber-400 animate-ping duration-1000 absolute -bottom-1" />
-              
-              {/* Elegant marble base pedestal */}
-              <div className="w-10 h-20 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 rounded-lg border border-amber-500/30 group-hover:border-amber-400 shadow-lg flex flex-col justify-between p-1 z-10 group-hover:scale-105 duration-300 relative">
-                <div className="w-full h-1 bg-amber-500/55 rounded" />
-                <span className="text-[7px] text-amber-300 font-mono text-center block">TƯỢNG ĐỒNG</span>
-              </div>
-              
-              {/* Floating Statue item */}
-              <div className="absolute top-[5%] flex flex-col items-center z-20 group-hover:-translate-y-2 duration-300 select-none">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 p-[1.5px] shadow-[0_0_15px_rgba(245,158,11,0.5)]">
-                  <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center overflow-hidden">
-                    <svg viewBox="0 0 100 100" className="w-11 h-11 text-amber-300 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                      <path 
-                        d="M 50,22 C 52,22 54,23 54.5,25 C 55,27 55,30 53,32 C 51,34 49,36 49.5,38 C 50,40 52.5,39.5 53.5,41 C 54.5,42.5 54,45 52,47 C 50,49 46.5,49 45,51 C 43.5,53 43.5,56 42.5,58 C 41.5,60 38.5,62 37,65" 
-                        fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" 
-                      />
-                      <path d="M 49.5,43 L 50,56 M 48,44 L 46.5,54 M 51.5,44 L 54,55" fill="none" stroke="#fcd34d" strokeWidth="2.2" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="mt-1 bg-amber-500 text-slate-950 font-sans font-bold text-[8px] px-1 rounded shadow select-none">BÁC HỒ</div>
-              </div>
-            </div>
-
-            {/* 2. HOTSPOT: Bàn làm việc Bút máy & Hermes (Left Pedestal) */}
-            <div 
-              className="absolute top-[44%] left-[23%] w-[12%] h-[32%] flex flex-col items-center justify-end cursor-pointer group"
-              onMouseEnter={() => setHoveredHotspot('cab-doc-bvat')}
-              onMouseLeave={() => setHoveredHotspot(null)}
-              onClick={() => setSelectedCabinet(cabinets[1])}
-            >
-              <div className="w-14 h-3.5 rounded-full bg-amber-500/15 group-hover:bg-amber-400/30 blur-sm duration-300 absolute -bottom-1" />
-              
-              {/* Glass showcase pedestal table */}
-              <div className="w-12 h-16 bg-slate-900 border border-amber-500/20 group-hover:border-amber-400 rounded shadow-lg flex flex-col justify-between p-1 z-10 group-hover:scale-105 duration-300">
-                <div className="w-full h-8 bg-cyan-500/10 border border-cyan-400/20 rounded flex items-center justify-center">
-                  <Lightbulb className="w-4 h-4 text-amber-400 animate-pulse" />
-                </div>
-                <div className="text-[6px] text-slate-500 font-mono text-center">TỦ KỶ VẬT</div>
-              </div>
-
-              {/* Floating pen icon */}
-              <div className="absolute top-[8%] z-20 group-hover:-translate-y-1.5 duration-300">
-                <div className="w-10 h-10 rounded-xl bg-slate-950 border border-amber-500/40 shadow-md flex items-center justify-center p-1.5">
-                  <img src={cabinets[1].image} alt="Bút máy Bác" className="w-full h-full object-cover rounded" />
-                </div>
-              </div>
-            </div>
-
-            {/* 3. HOTSPOT: Đôi dép cao su (Right Pedestal) */}
-            <div 
-              className="absolute top-[44%] right-[23%] w-[12%] h-[32%] flex flex-col items-center justify-end cursor-pointer group"
-              onMouseEnter={() => setHoveredHotspot('cab-dep-cao-su')}
-              onMouseLeave={() => setHoveredHotspot(null)}
-              onClick={() => setSelectedCabinet(cabinets[2])}
-            >
-              <div className="w-14 h-3.5 rounded-full bg-amber-500/15 group-hover:bg-amber-400/30 blur-sm duration-300 absolute -bottom-1" />
-              
-              {/* Red-topped wooden pillar */}
-              <div className="w-12 h-16 bg-slate-900 border border-amber-500/20 group-hover:border-amber-400 rounded shadow-lg flex flex-col justify-between p-1 z-10 group-hover:scale-105 duration-300">
-                <div className="w-full h-8 bg-red-950/20 border border-red-500/20 rounded flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-red-500 animate-pulse" />
-                </div>
-                <div className="text-[6px] text-slate-500 font-mono text-center">DÉP CAO SU</div>
-              </div>
-
-              {/* Floating sandals icon */}
-              <div className="absolute top-[8%] z-20 group-hover:-translate-y-1.5 duration-300">
-                <div className="w-10 h-10 rounded-xl bg-slate-950 border border-amber-500/40 shadow-md flex items-center justify-center p-1.5">
-                  <img src={cabinets[2].image} alt="Dép cao su" className="w-full h-full object-cover rounded" />
-                </div>
-              </div>
-            </div>
-
-            {/* 4. HOTSPOT: Nhật ký trong tù (Left Wall) */}
-            <div 
-              className="absolute top-[16%] left-[23%] w-[10%] h-[24%] flex flex-col items-center justify-start cursor-pointer group"
-              onMouseEnter={() => setHoveredHotspot('cab-nhat-ky-trong-tu')}
-              onMouseLeave={() => setHoveredHotspot(null)}
-              onClick={() => setSelectedCabinet(cabinets[3])}
-            >
-              <div className="w-full h-full bg-slate-900/90 border border-amber-500/30 group-hover:border-amber-400 rounded-xl p-1 shadow-[0_5px_15px_rgba(0,0,0,0.5)] group-hover:scale-105 duration-300 relative flex flex-col justify-between items-center text-center">
-                <div className="w-full h-18 rounded overflow-hidden bg-slate-950 border border-white/5 relative">
-                  <img src={cabinets[3].image} alt="Tập thơ" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-amber-500/10" />
-                </div>
-                <span className="text-[7px] text-amber-300 font-mono tracking-widest font-extrabold uppercase mt-1">NHẬT KÝ</span>
-              </div>
-            </div>
-
-            {/* 5. PORTAL: Tủ sách di sản Cách mạng (Far Left Bookcase) */}
-            {onSwitchToBooks && (
-              <div 
-                className="absolute top-[12%] left-[2%] w-[15%] h-[65%] flex flex-col justify-end items-center cursor-pointer group"
-                onMouseEnter={() => setHoveredHotspot('portal-books')}
-                onMouseLeave={() => setHoveredHotspot(null)}
-                onClick={onSwitchToBooks}
-              >
-                <div className="w-20 h-5 rounded-full bg-amber-500/10 group-hover:bg-amber-400/25 blur-sm duration-300 absolute -bottom-1" />
-                
-                {/* Lit bookcase graphic */}
-                <div className="w-16 h-64 bg-gradient-to-b from-[#1b1008] to-[#0a0502] rounded-xl border border-amber-500/20 group-hover:border-amber-400 shadow-2xl flex flex-col justify-between p-1.5 z-10 duration-300 group-hover:scale-[1.03]">
-                  <div className="bg-slate-950/80 rounded p-1 border border-white/5 text-center mb-1">
-                    <span className="text-[7px] text-amber-400 font-mono font-bold block leading-none">TỦ SÁCH</span>
-                    <span className="text-[6px] text-slate-500 font-sans block">DI SẢN</span>
-                  </div>
-                  
-                  {/* Glowing shelves with books */}
-                  <div className="flex-1 space-y-2 flex flex-col justify-around py-1">
-                    {[1, 2, 3].map((s) => (
-                      <div key={s} className="h-6 w-full bg-amber-500/5 rounded border border-amber-500/10 flex items-center justify-around px-1 relative">
-                        {/* Lit shelf bottom glow */}
-                        <div className="absolute bottom-0 inset-x-0 h-[1.5px] bg-amber-400/40" />
-                        <BookOpen className="w-3.5 h-3.5 text-amber-400/70 group-hover:text-amber-400 animate-pulse" />
-                        <BookOpen className="w-3 h-3 text-amber-500/60" />
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-sans font-bold text-[7px] py-0.5 rounded text-center uppercase tracking-wide">
-                    Xem Đầy Đủ
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 6. PORTAL: Màn hình lớn Hành trình di sản (Far Right Monitor) */}
-            {onSwitchToTimeline && (
-              <div 
-                className="absolute top-[12%] right-[2%] w-[15%] h-[50%] flex flex-col justify-end items-center cursor-pointer group"
-                onMouseEnter={() => setHoveredHotspot('portal-timeline')}
-                onMouseLeave={() => setHoveredHotspot(null)}
-                onClick={onSwitchToTimeline}
-              >
-                <div className="w-20 h-5 rounded-full bg-amber-500/10 group-hover:bg-amber-400/25 blur-sm duration-300 absolute -bottom-1" />
-                
-                {/* Lit wall screen monitor */}
-                <div className="w-16 h-[170px] bg-slate-900 border border-slate-700/80 rounded-xl p-1.5 z-10 duration-300 group-hover:scale-[1.03] group-hover:border-amber-400 flex flex-col justify-between shadow-2xl relative">
-                  <div className="h-28 rounded-lg overflow-hidden bg-slate-950 border border-white/5 relative">
-                    <img 
-                      src="https://upload.wikimedia.org/wikipedia/commons/3/30/Kim_Lien_village.jpg" 
-                      alt="Timeline Screen" 
-                      className="w-full h-full object-cover group-hover:scale-105 duration-700" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center p-1">
-                      <span className="text-[6px] text-amber-300 font-mono tracking-widest font-extrabold uppercase">1890-1969</span>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center py-1">
-                    <span className="text-[7px] text-white font-mono font-bold block leading-none">HÀNH TRÌNH</span>
-                    <span className="text-[6px] text-slate-500 font-sans block mt-0.5">TƯ LIỆU ẢNH</span>
-                  </div>
-
-                  <div className="bg-amber-500 text-slate-950 font-sans font-bold text-[7px] py-0.5 rounded text-center uppercase tracking-wide">
-                    Xem Bản Đồ
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 7. PORTAL: Trợ lý Curator ảo (Desk Info desk) */}
-            {onOpenChat && (
-              <div 
-                className="absolute bottom-[3%] right-[10%] w-[14%] h-[28%] flex flex-col justify-end items-center cursor-pointer group"
-                onMouseEnter={() => setHoveredHotspot('portal-chat')}
-                onMouseLeave={() => setHoveredHotspot(null)}
-                onClick={onOpenChat}
-              >
-                <div className="w-16 h-4 rounded-full bg-amber-500/10 group-hover:bg-amber-400/25 blur-sm duration-300 absolute -bottom-1" />
-                
-                {/* Modern reception counter */}
-                <div className="w-14 h-16 bg-gradient-to-b from-slate-800 to-slate-950 rounded-xl border border-white/10 group-hover:border-amber-400 shadow-xl flex flex-col justify-between p-1 z-10 duration-300 group-hover:scale-105">
-                  <div className="w-full h-8 bg-slate-950 rounded border border-white/5 flex items-center justify-center relative overflow-hidden">
-                    <Bot className="w-5 h-5 text-amber-400 animate-bounce" />
-                    <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 border border-slate-950 animate-ping" />
-                  </div>
-                  <div className="text-center">
-                    <span className="text-[6px] text-white font-mono font-bold block leading-none">TRỢ LÝ ẢO</span>
-                    <span className="text-[5px] text-slate-500 font-sans block leading-none mt-0.5">HỌC GIẢ AI</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
+          {/* Majestic ambient ceiling spotlights or title overlay */}
+          <div className="absolute top-[5%] left-1/2 -translate-x-1/2 text-center select-none w-full max-w-lg px-4 z-10 pointer-events-none">
+            <h4 className="text-[10px] text-amber-500 font-mono font-extrabold uppercase tracking-[0.4em] mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] animate-pulse">
+              PHÒNG TRIỂN LÃM 3D HỒ CHÍ MINH
+            </h4>
+            <p className="text-[9px] text-slate-400 font-sans tracking-wide uppercase italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+              "Đời đời nhớ ơn Chủ tịch Hồ Chí Minh vĩ đại"
+            </p>
           </div>
 
           {/* ==================== FLOATING DETAIL HUD DIALOG ON HOVER ==================== */}
@@ -529,7 +828,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onSwitchToTimeline,
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  className="bg-slate-950/95 backdrop-blur-md border border-amber-500/40 rounded-xl p-3 shadow-2xl text-center flex flex-col items-center gap-1.5"
+                  className="bg-slate-950/95 backdrop-blur-md border border-amber-500/40 rounded-xl p-3 shadow-2xl text-center flex flex-col items-center gap-1.5 pointer-events-auto"
                 >
                   {hoveredHotspot === 'portal-books' && (
                     <>
@@ -566,12 +865,12 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onSwitchToTimeline,
           </div>
 
           {/* Room Ambient HUD Status Bar */}
-          <div className="w-full bg-slate-950/80 border-t border-white/5 py-2 px-6 flex items-center justify-between text-[9px] text-slate-400 z-10">
+          <div className="w-full bg-slate-950/80 border-t border-white/5 py-2 px-6 flex items-center justify-between text-[9px] text-slate-400 z-10 mt-auto">
             <span className="flex items-center gap-1">
               <Compass className="w-3.5 h-3.5 text-amber-500 animate-spin" style={{ animationDuration: '8s' }} />
-              <span className="font-mono">CHẾ ĐỘ XEM PHÒNG ẢO TRIỂN LÃM TỰ DO - DI CHUYỂN & ẤN VẬT THỂ TƯƠNG TÁC</span>
+              <span className="font-mono">CHẾ ĐỘ XEM PHÒNG 3D TRIỂN LÃM TỰ DO - XOAY CAMERA & CLICK VẬT THỂ TƯƠNG TÁC</span>
             </span>
-            <span className="hidden sm:inline font-sans text-slate-500 italic">Thăm ngắm các cụm hiện vật, tủ sách lịch sử trang nghiêm</span>
+            <span className="hidden sm:inline font-sans text-slate-500 italic">Thăm ngắm các cụm hiện vật, tủ sách lịch sử trang nghiêm bằng cách kéo xoay, cuộn để phóng to</span>
           </div>
 
         </div>
