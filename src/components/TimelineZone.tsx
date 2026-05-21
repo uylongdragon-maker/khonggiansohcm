@@ -55,176 +55,98 @@ export default function TimelineZone({ onNodeSelect, selectedNodeId }: TimelineZ
 
   return (
     <div className="flex flex-col h-full bg-transparent">
-      {/* Top Header Row from the Bold Typography Theme */}
-      <div className="mb-6 px-1">
+      {/* Top Header Row */}
+      <div className="mb-6 px-1 shrink-0">
         <div className="flex items-center gap-2.5 mb-2">
           <div className="h-[1px] w-6 bg-amber-500/50" />
           <span className="text-[10px] uppercase tracking-[0.3em] text-amber-500 font-bold">BIÊN NIÊN SỬ DI SẢN</span>
         </div>
         <h3 className="text-base md:text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
-          HÀNH TRÌNH HỒ CHÍ MINH
+          THEO DẤU CHÂN BÁC
         </h3>
         <p className="text-[11px] text-slate-400 font-sans mt-1">
-          Dấu ấn các mốc lịch sử cốt lõi trong sự nghiệp của Người. Di chuyển con trỏ vào từng mốc để tự động mở rộng câu chuyện.
+          Dấu ấn các mốc lịch sử cốt lõi trong sự nghiệp của Người. Kéo lướt ngang để xem các sự kiện và hình ảnh trưng bày.
         </p>
       </div>
 
-      {/* Vertical Timeline Linear Path with grid transitions */}
-      <div className="relative flex-1 overflow-y-auto pr-1.5 custom-scrollbar pb-8 flex flex-col gap-5">
-        {/* Glow Vertical Path Line */}
-        <div className="absolute left-[15px] top-4 bottom-10 w-[2px] bg-gradient-to-b from-amber-500/80 via-amber-500/30 to-transparent shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
+      {/* Horizontal Carousel */}
+      <div className="relative flex-1 w-full pb-2 min-h-0">
+        {/* Lớp gradient mờ ở 2 bên để báo hiệu có thể cuộn */}
+        <div className="absolute left-0 top-0 bottom-6 w-8 bg-gradient-to-r from-slate-950/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-6 w-8 bg-gradient-to-l from-slate-950/80 to-transparent z-10 pointer-events-none" />
 
-        {timelineData.map((event) => {
-          const isHovered = hoveredId === event.id;
-          const isSelected = selectedNodeId === event.id;
-          const isActive = isHovered || isSelected;
+        <div className="flex overflow-x-auto gap-5 pb-6 h-full snap-x snap-mandatory custom-scrollbar items-center px-4">
+          {timelineData.map((event) => {
+            const isHovered = hoveredId === event.id;
+            const isSelected = selectedNodeId === event.id;
+            const isActive = isHovered || isSelected;
 
-          return (
-            <div
-              key={event.id}
-              className="relative pl-10 group cursor-pointer"
-              onMouseEnter={() => setHoveredId(event.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              onClick={() => {
-                if (onNodeSelect) {
-                  // Cast event to TimelineNode
-                  onNodeSelect({
-                    id: event.id,
-                    year: event.year,
-                    title: event.title,
-                    description: event.description,
-                    photoUrl: event.image,
-                    details: event.details || event.description,
-                    category: event.category
-                  });
-                }
-              }}
-            >
-              {/* Point Node on the Axis Path */}
-              <div className="absolute left-[7px] top-4.5 w-4.5 h-4.5 flex items-center justify-center z-20">
-                {/* Unique Concentric Rippling Outer Halo for soft golden glow */}
-                <AnimatePresence>
-                  {isActive && (
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0.6 }}
-                      animate={{ scale: 2.2, opacity: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{
-                        repeat: Infinity,
-                        duration: 1.6,
-                        ease: "easeOut"
-                      }}
-                      className="absolute w-4 h-4 rounded-full bg-amber-500/50 pointer-events-none"
-                    />
-                  )}
-                </AnimatePresence>
-                
-                {/* Tactile Core Node with subtle pulsing glow */}
-                <motion.div 
-                  animate={{
-                    scale: isActive ? [1, 1.25, 1] : [1, 1.08, 1],
-                    boxShadow: isActive 
-                      ? [
-                          "0 0 4px rgba(245, 158, 11, 0.4)",
-                          "0 0 14px rgba(245, 158, 11, 0.75)",
-                          "0 0 4px rgba(245, 158, 11, 0.4)"
-                        ]
-                      : [
-                          "0 0 2px rgba(245, 158, 11, 0.15)",
-                          "0 0 6px rgba(245, 158, 11, 0.35)",
-                          "0 0 2px rgba(245, 158, 11, 0.15)"
-                        ]
-                  }}
-                  transition={{
-                    duration: isActive ? 1.8 : 2.6,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className={`w-4 h-4 border-2 flex items-center justify-center rounded-full transition-colors duration-300 ${
-                    isActive 
-                      ? 'bg-amber-400 border-amber-300' 
-                      : 'bg-[#030B1E] border-amber-500/40'
-                  }`}
-                >
-                  {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-950 absolute" />
-                  )}
-                </motion.div>
-              </div>
-
-              {/* Glassmorphism Story Card */}
-              <div 
-                className={`backdrop-blur-md border rounded-xl p-4 transition-all duration-500 transform ${
-                  isActive 
-                    ? 'bg-white/[0.08] border-amber-500/40 translate-x-1.5 shadow-[0_6px_25px_rgba(245,158,11,0.12),inset_0_1px_3px_rgba(255,255,255,0.05)]' 
-                    : 'bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04]'
-                }`}
+            return (
+              <div
+                key={event.id}
+                className="relative snap-center shrink-0 w-[260px] sm:w-[300px] h-full max-h-[380px] cursor-pointer group"
+                onMouseEnter={() => setHoveredId(event.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                onClick={() => {
+                  if (onNodeSelect) {
+                    onNodeSelect({
+                      id: event.id,
+                      year: event.year,
+                      title: event.title,
+                      description: event.description,
+                      photoUrl: event.image,
+                      details: event.details || event.description,
+                      category: event.category
+                    });
+                  }
+                }}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-black tracking-widest text-[#f59e0b] font-mono bg-amber-500/10 px-2 py-0.5 rounded-md">
-                    NĂM {event.year}
-                  </span>
-                  <span className="text-[9px] uppercase text-slate-400 font-mono tracking-wider flex items-center gap-1">
-                    <Compass className="w-3 h-3 text-amber-500" />
-                    BẢO TỒN SỐ
-                  </span>
+                {/* Card Container */}
+                <div className={`w-full h-full rounded-2xl flex flex-col overflow-hidden backdrop-blur-md border transition-all duration-500 transform ${isActive ? 'bg-white/[0.08] border-amber-500/60 scale-[1.02] shadow-[0_10px_30px_rgba(245,158,11,0.2)]' : 'bg-white/[0.02] border-white/[0.08] hover:bg-white/[0.04]'}`}>
+                  
+                  {/* Image Display Area (luôn hiển thị) */}
+                  <div className="h-[45%] w-full relative overflow-hidden bg-slate-950 shrink-0 border-b border-white/10">
+                    <img 
+                      src={event.image} 
+                      alt={event.title} 
+                      className={`w-full h-full object-cover transition-all duration-700 ${isActive ? 'scale-110 grayscale-0 opacity-100' : 'grayscale opacity-50'}`}
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90" />
+                    <div className="absolute bottom-3 left-3">
+                       <span className={`text-xs font-black tracking-widest font-mono px-2 py-1 rounded-md shadow-lg border transition-colors ${isActive ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900/80 text-amber-500 border-amber-500/30'}`}>
+                        NĂM {event.year}
+                       </span>
+                    </div>
+                  </div>
+
+                  {/* Content Area */}
+                  <div className="p-5 flex flex-col flex-1">
+                    <h3 className={`text-sm md:text-base font-bold text-white transition-colors duration-300 ${isActive ? 'text-amber-400' : ''}`}>
+                      {event.title}
+                    </h3>
+                    <div className="h-[1px] w-8 bg-amber-500/30 my-3" />
+                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans text-justify line-clamp-4">
+                      {event.description}
+                    </p>
+                    
+                    <div className="mt-auto pt-4 flex justify-between items-center">
+                      <span className="text-[9px] uppercase text-slate-400 font-mono tracking-wider flex items-center gap-1">
+                        <Compass className="w-3 h-3 text-amber-500" />
+                        BẢO TỒN SỐ
+                      </span>
+                      <span className={`text-[10px] font-mono transition-opacity duration-300 flex items-center gap-1 ${isActive ? 'text-amber-400 opacity-100' : 'text-slate-500 opacity-0'}`}>
+                        <Eye className="w-3 h-3" /> CHI TIẾT
+                      </span>
+                    </div>
+                  </div>
+
                 </div>
-
-                <h3 className="text-sm font-bold mt-2 text-white group-hover:text-amber-300 transition-colors">
-                  {event.title}
-                </h3>
-                
-                {/* Expand Area upon Hover/Click natively using CSS and motion.div for pristine spring/slide animations */}
-                <AnimatePresence initial={false}>
-                  {isActive && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 space-y-3">
-                        <motion.p 
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 6 }}
-                          transition={{ duration: 0.3, delay: 0.05, ease: 'easeOut' }}
-                          className="text-[11px] text-slate-300 leading-relaxed font-sans text-justify"
-                        >
-                          {event.description}
-                        </motion.p>
-                        
-                        {/* Grayscale hover effects which restores to color upon interaction */}
-                        <motion.div 
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.35, delay: 0.1, ease: 'easeOut' }}
-                          className="w-full h-28 rounded-lg overflow-hidden border border-white/10 relative bg-slate-950"
-                        >
-                          <img 
-                            src={event.image} 
-                            alt={event.title} 
-                            className="w-full h-full object-cover grayscale opacity-45 group-hover:grayscale-0 group-hover:opacity-90 transition-all duration-700" 
-                            referrerPolicy="no-referrer"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                          
-                          <div className="absolute bottom-2 right-2 text-[9px] text-amber-400 flex items-center gap-1 font-mono">
-                            <Eye className="w-3 h-3" /> CLICK XEM CHI TIẾT
-                          </div>
-                        </motion.div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
