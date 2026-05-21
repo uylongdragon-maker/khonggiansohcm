@@ -577,7 +577,7 @@ export default function ExhibitionLayout() {
       <footer className="relative w-full z-40 bg-slate-950/50 backdrop-blur-xl border-t border-white/5 py-4 px-6 flex flex-col items-center gap-3 mt-auto shadow-2xl">
         <div className="flex bg-slate-900/60 p-1 rounded-full border border-white/10 max-w-lg w-full justify-between shadow-xl">
           {[
-            { id: 'hanh-trinh', label: 'HÀNH TRÌNH DI SẢN', icon: Clock },
+            { id: 'hanh-trinh', label: 'THEO DẤU CHÂN BÁC', icon: Clock },
             { id: 'tuong-tac', label: 'KHÔNG GIAN TƯƠNG TÁC', icon: Compass },
             { id: 'thu-vien', label: 'THƯ VIỆN TƯ LIỆU', icon: Library },
           ].map((tab) => {
