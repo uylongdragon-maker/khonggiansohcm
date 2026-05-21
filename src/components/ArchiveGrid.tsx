@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArchiveItem } from '../types';
@@ -165,7 +166,7 @@ export default function ArchiveGrid({ onItemSelect, selectedItemId }: ArchiveGri
                     src={item.imgUrl} 
                     alt={item.name} 
                     className="w-full h-full object-cover mix-blend-luminosity group-hover:mix-blend-normal group-hover:scale-105 transition-all duration-700 opacity-60 group-hover:opacity-95" 
-                    referrerPolicy="referrer"
+                    referrerPolicy="no-referrer"
                     loading="lazy"
                   />
                   
@@ -267,3 +268,4 @@ export default function ArchiveGrid({ onItemSelect, selectedItemId }: ArchiveGri
     </div>
   );
 }
+

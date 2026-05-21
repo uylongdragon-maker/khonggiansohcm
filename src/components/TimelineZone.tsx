@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { TimelineNode } from '../types';
@@ -228,3 +229,4 @@ export default function TimelineZone({ onNodeSelect, selectedNodeId }: TimelineZ
     </div>
   );
 }
+

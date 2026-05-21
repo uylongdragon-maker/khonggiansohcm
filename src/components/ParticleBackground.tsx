@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef } from 'react';
 
 export default function ParticleBackground() {
@@ -127,3 +128,4 @@ export default function ParticleBackground() {
     />
   );
 }
+
