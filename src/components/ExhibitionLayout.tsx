@@ -28,10 +28,10 @@ import { TimelineNode, ArchiveItem } from '../types';
 
 export default function ExhibitionLayout() {
   // Navigation tabs or active views (specifically for responsive mobile screens, but also highlights areas on desktop)
-  const [activeTab, setActiveTab] = useState<'hanh-trinh' | 'thu-vien' | 'tuong-tac'>('tuong-tac');
+  const [activeTab, setActiveTab] = useState<'hanh-trinh' | 'tuong-tac'>('tuong-tac');
   
   // Custom interactive viewport states
-  const [centerViewMode, setCenterViewMode] = useState<'3d' | 'plaquet'>('3d');
+  const [centerViewMode, setCenterViewMode] = useState<'3d' | 'books' | 'plaquet'>('3d');
   const [isChatOpen, setIsChatOpen] = useState(false);
   
   // Interactive detail states
@@ -140,7 +140,7 @@ export default function ExhibitionLayout() {
       <ParticleBackground />
 
       {/* Dynamic Ambient Background Aura lights */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-slate-950/40 to-slate-950 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-600/30 via-slate-800/80 to-[#0f172a] pointer-events-none z-0" />
 
       {/* Decorative Gold Header Rail */}
       <div className="w-full h-1 bg-gradient-to-r from-amber-600/10 via-amber-400 to-amber-600/10 z-50 shadow-[0_1px_15px_rgba(245,158,11,0.5)]" />
@@ -203,7 +203,7 @@ export default function ExhibitionLayout() {
           }`}
         >
           {/* Sub-tab selection indicator to switch view in central core */}
-          <div className="flex bg-slate-950/90 p-1.5 rounded-full border border-white/10 shrink-0 font-bold tracking-wider max-w-sm w-full mx-auto shadow-inner">
+          <div className="flex bg-slate-950/90 p-1.5 rounded-full border border-white/10 shrink-0 font-bold tracking-wider max-w-md w-full mx-auto shadow-inner">
             <button 
               onClick={() => setCenterViewMode('3d')}
               className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
@@ -212,7 +212,17 @@ export default function ExhibitionLayout() {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              TỦ TRƯNG BÀY DI SẢN
+              MẪU VẬT DI SẢN
+            </button>
+            <button 
+              onClick={() => setCenterViewMode('books')}
+              className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
+                centerViewMode === 'books' 
+                  ? 'bg-amber-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.6)]' 
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              TỦ SÁCH DI SẢN
             </button>
             <button 
               onClick={() => setCenterViewMode('plaquet')}
@@ -222,13 +232,20 @@ export default function ExhibitionLayout() {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              BẢN TIN TRUYỀN THÔNG
+              BẢN TIN
             </button>
           </div>
 
           {centerViewMode === '3d' ? (
             <div className="flex-1 min-h-0">
               <VirtualMuseumGame />
+            </div>
+          ) : centerViewMode === 'books' ? (
+            <div className="flex-1 min-h-0 bg-slate-950/40 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col h-full overflow-y-auto">
+              <ArchiveGrid 
+                onItemSelect={(item) => setSelectedArchiveItem(item)}
+                selectedItemId={selectedArchiveItem?.id}
+              />
             </div>
           ) : (
             /* Central Glassmorphic Portal Welcome Box */
@@ -364,18 +381,6 @@ export default function ExhibitionLayout() {
               </div>
             </div>
           )}
-        </section>
-
-        {/* Right Wing - Digital Library Data Explorer */}
-        <section 
-          className={`col-span-12 bg-slate-950/40 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col h-full transition-all duration-500 ${
-            activeTab === 'thu-vien' ? 'scale-100 z-10 block' : 'hidden'
-          }`}
-        >
-          <ArchiveGrid 
-            onItemSelect={(item) => setSelectedArchiveItem(item)}
-            selectedItemId={selectedArchiveItem?.id}
-          />
         </section>
 
       </main>
@@ -576,11 +581,10 @@ export default function ExhibitionLayout() {
 
       {/* FOOTER NAVIGATION MENU */}
       <footer className="relative w-full z-40 bg-slate-950/50 backdrop-blur-xl border-t border-white/5 py-4 px-6 flex flex-col items-center gap-3 mt-auto shadow-2xl">
-        <div className="flex bg-slate-900/60 p-1 rounded-full border border-white/10 max-w-lg w-full justify-between shadow-xl">
+        <div className="flex bg-slate-900/60 p-1 rounded-full border border-white/10 max-w-md w-full justify-between shadow-xl">
           {[
             { id: 'hanh-trinh', label: 'THEO DẤU CHÂN BÁC', icon: Clock },
-            { id: 'tuong-tac', label: 'KHÔNG GIAN TƯƠNG TÁC', icon: Compass },
-            { id: 'thu-vien', label: 'THƯ VIỆN TƯ LIỆU', icon: Library },
+            { id: 'tuong-tac', label: 'KHÔNG GIAN VĂN HÓA', icon: Compass },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -615,7 +619,7 @@ export default function ExhibitionLayout() {
       </footer>
 
       {/* Frame Border Detail from Bold Typography Theme */}
-      <div className="fixed inset-0 border-[12px] border-slate-950 pointer-events-none z-50"></div>
+      <div className="fixed inset-0 border-[12px] border-[#0f172a] pointer-events-none z-50"></div>
       <div className="fixed top-3.5 left-3.5 w-12 h-12 border-l border-t border-amber-500/35 pointer-events-none z-50"></div>
       <div className="fixed top-3.5 right-3.5 w-12 h-12 border-r border-t border-amber-500/35 pointer-events-none z-50"></div>
       <div className="fixed bottom-3.5 left-3.5 w-12 h-12 border-l border-b border-amber-500/35 pointer-events-none z-50"></div>

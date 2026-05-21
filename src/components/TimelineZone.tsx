@@ -102,14 +102,14 @@ export default function TimelineZone({ onNodeSelect, selectedNodeId }: TimelineZ
                 }}
               >
                 {/* Card Container */}
-                <div className={`w-full h-full rounded-2xl flex flex-col overflow-hidden backdrop-blur-md border transition-all duration-500 transform ${isActive ? 'bg-white/[0.08] border-amber-500/60 scale-[1.02] shadow-[0_10px_30px_rgba(245,158,11,0.2)]' : 'bg-white/[0.02] border-white/[0.08] hover:bg-white/[0.04]'}`}>
+                <div className={`w-full h-full rounded-2xl flex flex-col overflow-hidden backdrop-blur-md border transition-all duration-500 transform ${isActive ? 'bg-amber-900/40 border-amber-500/80 scale-[1.03] shadow-[0_15px_40px_rgba(245,158,11,0.3)] -translate-y-2' : 'bg-slate-900/60 border-white/10 hover:bg-slate-800/80 hover:border-amber-500/40 hover:-translate-y-2 hover:shadow-[0_8px_25px_rgba(245,158,11,0.2)]'}`}>
                   
                   {/* Image Display Area (luôn hiển thị) */}
                   <div className="h-[45%] w-full relative overflow-hidden bg-slate-950 shrink-0 border-b border-white/10">
                     <img 
                       src={event.image} 
                       alt={event.title} 
-                      className={`w-full h-full object-cover transition-all duration-700 ${isActive ? 'scale-110 grayscale-0 opacity-100' : 'grayscale opacity-50'}`}
+                      className={`w-full h-full object-cover transition-all duration-700 ${isActive ? 'scale-110 grayscale-0 opacity-100' : 'grayscale opacity-70 group-hover:grayscale-[30%] group-hover:opacity-95 group-hover:scale-105'}`}
                       referrerPolicy="no-referrer"
                       loading="lazy"
                     />

@@ -15,7 +15,7 @@ export const TIMELINE_NODES: TimelineNode[] = [
     year: '1911',
     title: 'Hành trình vạn dặm cứu nước',
     description: 'Ra đi tìm đường cứu nước từ Cảng Nhà Rồng trên tàu Amiral Latouche-Tréville.',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/C%E1%BA%A3ng_Nh%C3%A0_R%E1%BB%93ng_1920.jpg', // Cảng Nhà Rồng
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Ho_Chi_Minh_Museum%2C_in_Saigon_7.jpg', // Bến Nhà Rồng - Bảo tàng HCM
     category: 'cuu-nuoc',
     details: 'Ngày 5/6/1911, với tên gọi Văn Ba, người thanh niên yêu nước Nguyễn Tất Thành chính thức lên tàu ra đi hải ngoại. Quyết định dũng cảm này mở đầu cho hành trình 30 năm bôn ba khắp 4 biển 5 châu để tìm ra con đường tự do cho dân tộc.'
   },
@@ -42,7 +42,7 @@ export const TIMELINE_NODES: TimelineNode[] = [
     year: '1941',
     title: 'Trở về quê hương Tổ quốc',
     description: 'Về nước trực tiếp lãnh đạo đấu tranh tại Hang Pác Bó, Cao Bằng.',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Pac_Bo_village.jpg', // Pác Bó stream
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Su%E1%BB%91i_L%C3%AA-nin%2C_%C4%90%C3%B4ng_B%E1%BA%AFc_2012.JPG', // Suối Lê-nin, Pác Bó
     category: 'doc-lap',
     details: 'Tháng 2/1941, sau 30 năm bôn ba vạn dặm xa xứ, Người vượt biên giới Việt - Trung ở cột mốc 108 trở về nước. Người sống và làm việc tại hang Cốc Bó (Pác Bó, Cao Bằng), đặt tên dòng suối trước cửa hang là Suối Lê-nin và ngọn núi sừng sững là Núi Các-Mác.'
   },
@@ -51,7 +51,7 @@ export const TIMELINE_NODES: TimelineNode[] = [
     year: '1945',
     title: 'Khai sinh nước Việt Nam mới',
     description: 'Đọc bản Tuyên ngôn Độc lập tại Quảng trường Ba Đình.',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/de/President_Ho_Chi_Minh_reading_the_Declaration_of_Independence_of_Vietnam.jpg', // Đọc Tuyên Ngôn Độc Lập
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Pr%C3%A9sident_Ho-chi-Minh_lit_la_Proclamation-d%27ind%C3%A9pendance_sur_la_place_Ba-dinh_le_2nd_Sep_1945.jpg', // Đọc Tuyên Ngôn Độc Lập
     category: 'doc-lap',
     details: 'Ngày 2/9/1945, trước hàng vạn đồng bào tập trung tại Quảng trường Ba Đình lịch sử, Chủ tịch Hồ Chí Minh đọc bản Tuyên ngôn Độc lập, trịnh trọng tuyên bố với quốc dân và thế giới về sự ra đời của nước Việt Nam Dân chủ Cộng hòa.'
   },
@@ -73,7 +73,7 @@ export const ARCHIVE_ITEMS: ArchiveItem[] = [
     category: 'tac-pham',
     year: '1945',
     description: 'Văn kiện pháp lý lịch sử tuyên bố độc lập chủ quyền quốc gia của Việt Nam.',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Vietnam_Declaration_of_Independence_at_Ba_Dinh.jpg',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Pr%C3%A9sident_Ho-chi-Minh_lit_la_Proclamation-d%27ind%C3%A9pendance_sur_la_place_Ba-dinh_le_2nd_Sep_1945.jpg',
     tags: ['Tuyên ngôn', 'Độc lập', '1945', 'Văn kiện'],
     source: 'Bảo tàng Lịch sử Quốc gia',
     dimensions: '32cm x 45cm'
@@ -84,7 +84,7 @@ export const ARCHIVE_ITEMS: ArchiveItem[] = [
     category: 'tac-pham',
     year: '1942-1943',
     description: 'Tác phẩm văn học kiệt xuất bao gồm 133 bài thơ bằng chữ Hán viết trong nhà lao Quảng Tây.',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/07/Nhat_ky_trong_tu_cover.jpg',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Ho_Chi_Minh_1946.jpg',
     tags: ['Thơ ca', 'Nhà lao', 'Chữ Hán', 'Bảo vật Quốc gia'],
     source: 'Bảo tàng Hồ Chí Minh',
     dimensions: 'Bản viết tay khổ nhỏ'
@@ -128,7 +128,7 @@ export const ARCHIVE_ITEMS: ArchiveItem[] = [
     category: 'thu-tin',
     year: '1945',
     description: 'Bức thư chứa đựng khát vọng vĩ đại gửi gắm tương lai nước nhà vào học sinh học tập.',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Ho_Chi_Minh_and_children.jpg', // Bác Hồ với thiếu nhi nhi tình thương
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Ho-chi-Minh_with_children_%281%29.jpg', // Bác Hồ với thiếu nhi
     tags: ['Thư gửi', 'Giáo dục', 'Thế hệ trẻ', 'Khát vọng'],
     source: 'Bộ Giáo dục và Đào tạo',
     dimensions: 'In báo Cứu Quốc'
