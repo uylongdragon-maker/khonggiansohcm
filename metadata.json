@@ -1,0 +1,6 @@
+{
+  "name": "Không gian Văn hóa Hồ Chí Minh",
+  "description": "Không gian triển lãm kỹ thuật số tương tác về cuộc đời, sự nghiệp và di sản của Chủ tịch Hồ Chí Minh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
