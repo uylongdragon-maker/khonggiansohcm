@@ -2,13 +2,13 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyADtdM-ZR10hI0rQEUHtlVZNmLXXSOb4wQ",
-  authDomain: "khonggianhcm-e33b6.firebaseapp.com",
-  projectId: "khonggianhcm-e33b6",
-  storageBucket: "khonggianhcm-e33b6.firebasestorage.app",
-  messagingSenderId: "576129243350",
-  appId: "1:576129243350:web:96899e06fd7dac5a2d1177",
-  measurementId: "G-F5FLJ61CSC"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 // Khởi tạo Firebase App (tránh khởi tạo lại nếu đã tồn tại)
