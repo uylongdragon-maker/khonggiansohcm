@@ -39,7 +39,7 @@ const timelineData: TimelineEvent[] = [
     year: '1945',
     title: 'Tuyên ngôn Độc lập',
     description: 'Tại Quảng trường Ba Đình lịch sử, Chủ tịch Hồ Chí Minh đọc bản Tuyên ngôn Độc lập, khai sinh ra nước Việt Nam Dân chủ Cộng hòa.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/d/de/President_Ho_Chi_Minh_reading_the_Declaration_of_Independence_of_Vietnam.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/H%C3%ACnh_B%C3%A1c_H%E1%BB%93_%C4%91%E1%BB%8Dc_tuy%C3%AAn_ng%C3%B4n_%C4%91%E1%BB%99c_l%E1%BA%ADp_th%C6%B0%E1%BB%9Dng_%C4%91%C6%B0%E1%BB%A3c_s%E1%BB%AD_d%E1%BB%A5ng_tr%C3%AAn_b%C3%A1o_ch%C3%AD.jpg',
     details: 'Bản tuyên ngôn hùng hồn kết tinh khát vọng ngàn năm độc lập vững bền, là mốc son chói lọi trong lịch sử thế kỷ của dân tộc Việt Nam.',
     category: 'doc-lap'
   }
