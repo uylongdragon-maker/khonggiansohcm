@@ -61,12 +61,30 @@ const DEFAULT_CABINETS: Cabinet[] = [
 ];
 
 const PAINTING_SLOTS = [
-  { id: 'p1', title: 'Tuyên ngôn Độc lập', color: 0xc8860a, accent: 0x8b5e00, x: -6.2, y: 5.2, z: -9.5, w: 2.5, h: 1.85, defaultImage: '/p1.jpg' },
-  { id: 'p2', title: 'Hành trình Cứu nước', color: 0x1a3a6c, accent: 0x0f2347, x: -1.8, y: 5.35, z: -9.5, w: 2.15, h: 1.65, defaultImage: '/p2.jpg' },
-  { id: 'p3', title: 'Bác Hồ với Nhân dân', color: 0x7a1c1c, accent: 0x4a0e0e, x: 2.2, y: 5.35, z: -9.5, w: 2.3, h: 1.85, defaultImage: '/p3.jpg' },
-  { id: 'p4', title: 'Chiến thắng ĐBP 1954', color: 0x1a4a1a, accent: 0x0d2e0d, x: 6.2, y: 5.2, z: -9.5, w: 2.15, h: 1.65, defaultImage: '/p4.jpg' },
-  { id: 'p5', title: 'Nhà sàn Phủ Chủ tịch', color: 0x3a1a5c, accent: 0x220e38, x: -9.45, y: 5.0, z: -3.5, w: 1.85, h: 2.0, rotY: Math.PI / 2, defaultImage: '/p5.jpg' },
-  { id: 'p6', title: 'Bác Hồ với Thiếu nhi', color: 0x6b2800, accent: 0x421800, x: 9.45, y: 5.0, z: -3.5, w: 1.85, h: 2.0, rotY: -Math.PI / 2, defaultImage: '/p6.jpg' },
+  { 
+    id: 'p1', title: 'Tuyên ngôn Độc lập', color: 0xc8860a, accent: 0x8b5e00, x: -6.2, y: 5.2, z: -9.5, w: 2.5, h: 1.85, defaultImage: '/p1.jpg',
+    description: 'Bức ảnh ghi lại thời khắc lịch sử vô song ngày 2/9/1945, tại Quảng trường Ba Đình Hà Nội, Chủ tịch Hồ Chí Minh thay mặt Chính phủ lâm thời đọc bản Tuyên ngôn Độc lập khai sinh ra nước Việt Nam Dân chủ Cộng hòa.'
+  },
+  { 
+    id: 'p2', title: 'Hành trình Cứu nước', color: 0x1a3a6c, accent: 0x0f2347, x: -1.8, y: 5.35, z: -9.5, w: 2.15, h: 1.65, defaultImage: '/p2.jpg',
+    description: 'Đồng chí Nguyễn Ái Quốc phát biểu tại Đại hội đại biểu toàn quốc lần thứ XVIII của Đảng Xã hội Pháp ở Tours (tháng 12/1920). Tại đây, Người đã bỏ phiếu tán thành gia nhập Quốc tế thứ ba và tham gia thành lập Đảng Cộng sản Pháp.'
+  },
+  { 
+    id: 'p3', title: 'Bác Hồ với Nhân dân', color: 0x7a1c1c, accent: 0x4a0e0e, x: 2.2, y: 5.35, z: -9.5, w: 2.3, h: 1.85, defaultImage: '/p3.jpg',
+    description: 'Chủ tịch Hồ Chí Minh giản dị ngồi quan sát và chỉ đạo trận đánh Đông Khê trong chiến dịch Biên giới Thu Đông năm 1950. Hình ảnh thể hiện sự sâu sát thực tế chiến trường và tác phong quần chúng của vị lãnh tụ kính yêu.'
+  },
+  { 
+    id: 'p4', title: 'Chiến thắng ĐBP 1954', color: 0x1a4a1a, accent: 0x0d2e0d, x: 6.2, y: 5.2, z: -9.5, w: 2.15, h: 1.65, defaultImage: '/p4.jpg',
+    description: 'Hình ảnh lịch sử ghi lại cảnh các chiến sĩ quân đội nhân dân Việt Nam phất cao lá cờ "Quyết chiến Quyết thắng" trên nóc hầm tướng De Castries, đánh dấu sự toàn thắng của Chiến dịch Điện Biên Phủ vang dội năm châu.'
+  },
+  { 
+    id: 'p5', title: 'Nhà sàn Phủ Chủ tịch', color: 0x3a1a5c, accent: 0x220e38, x: -9.45, y: 5.0, z: -3.5, w: 1.85, h: 2.0, rotY: Math.PI / 2, defaultImage: '/p5.jpg',
+    description: 'Nhà sàn gỗ đơn sơ của Bác Hồ trong khu di tích Phủ Chủ tịch tại Hà Nội, nơi Người đã sống và làm việc suốt 15 năm cuối đời (1954 - 1969). Ngôi nhà là biểu tượng cao đẹp của lối sống giản dị, thanh tao.'
+  },
+  { 
+    id: 'p6', title: 'Bác Hồ với Thiếu nhi', color: 0x6b2800, accent: 0x421800, x: 9.45, y: 5.0, z: -3.5, w: 1.85, h: 2.0, rotY: -Math.PI / 2, defaultImage: '/p6.jpg',
+    description: 'Chủ tịch Hồ Chí Minh luôn dành tình thương yêu vô bờ bến cho thế hệ măng non đất nước. Bức ảnh ghi lại nụ cười rạng rỡ và những khoảnh khắc ấm áp của Người bên các cháu thiếu nhi Việt Nam.'
+  },
 ];
 
 const ADMIN_PASSWORD = 'admin2026';
@@ -84,6 +102,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
   }, [onSwitchToBooks, onOpenChat]);
 
   const [selectedCabinet, setSelectedCabinet] = useState<Cabinet | null>(null);
+  const [selectedPainting, setSelectedPainting] = useState<typeof PAINTING_SLOTS[number] | null>(null);
   const [scanLayer, setScanLayer] = useState<'optical' | 'infra' | 'xray'>('optical');
   const [isScanning, setIsScanning] = useState(false);
   const [tributeCounts, setTributeCounts] = useState<Record<string, number>>({
@@ -641,6 +660,9 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
       } else if (type==='exhibit') {
         const cab = DEFAULT_CABINETS.find(c=>c.id===id);
         if (cab) setSelectedCabinet(prev => prev?.id===id ? prev : { ...cab });
+      } else if (type==='painting') {
+        const paint = PAINTING_SLOTS.find(p=>p.id===id);
+        if (paint) setSelectedPainting(paint);
       }
     };
     const onMouseMove = (e:MouseEvent) => onMove(e.clientX, e.clientY);
@@ -965,6 +987,75 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
                       onClick={()=>{ setSelectedCabinet(null); setScanLayer('optical'); }}
                       className="flex-1 py-2 rounded-xl bg-yellow-700/30 hover:bg-yellow-700/50 border border-yellow-700/30 text-yellow-300 font-extrabold text-[11px] duration-200 cursor-pointer"
                     >Đóng</button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          );
+        })()}
+      </AnimatePresence>
+
+      {/* ═══ PAINTING DETAIL MODAL ══════════════════════════════════════════════ */}
+      <AnimatePresence>
+        {selectedPainting && (() => {
+          const paint = selectedPainting;
+          const imageUrl = paintingImages[paint.id] || paint.defaultImage;
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl overflow-y-auto">
+              <motion.div
+                initial={{ scale:0.94, opacity:0, y:14 }}
+                animate={{ scale:1, opacity:1, y:0 }}
+                exit={{ scale:0.94, opacity:0, y:14 }}
+                transition={{ type:'spring', stiffness:300, damping:28 }}
+                className="bg-[#0e1220]/95 border border-yellow-800/40 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden my-6 flex flex-col"
+              >
+                {/* Header */}
+                <div className="bg-gradient-to-r from-[#0a0e1a] to-[#111828] px-5 py-4 border-b border-yellow-800/20 flex items-start justify-between gap-3">
+                  <div>
+                    <span className="text-[9px] font-mono text-yellow-600/80 uppercase tracking-widest">Tranh tư liệu lịch sử</span>
+                    <h2 className="text-base font-extrabold text-yellow-100 mt-0.5">{paint.title}</h2>
+                  </div>
+                  <button onClick={() => setSelectedPainting(null)}
+                    className="text-gray-500 hover:text-white p-1.5 hover:bg-white/8 rounded-lg duration-150 cursor-pointer shrink-0">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Content */}
+                <div className="p-5 flex flex-col gap-4">
+                  {/* Full Size Image */}
+                  <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/5 flex items-center justify-center max-h-[60vh] min-h-[250px]">
+                    <img 
+                      src={imageUrl} 
+                      alt={paint.title} 
+                      className="w-full h-auto object-contain max-h-[55vh] rounded-lg shadow-lg" 
+                      referrerPolicy="no-referrer" 
+                    />
+                  </div>
+
+                  {/* Description Box */}
+                  <div className="bg-white/[0.02] border border-yellow-900/20 rounded-xl p-4">
+                    <h4 className="text-xs font-bold text-yellow-400 mb-1.5">Chú thích lịch sử:</h4>
+                    <p className="text-[12px] text-gray-300 leading-relaxed font-sans">
+                      {paint.description}
+                    </p>
+                  </div>
+
+                  {/* Footer Actions */}
+                  <div className="flex justify-end gap-3 mt-1">
+                    {isAdmin && (
+                      <button onClick={() => { handleWallUpload(paint.id); setSelectedPainting(null); }}
+                        className="px-4 py-2 rounded-xl bg-yellow-500/15 border border-yellow-500/30 hover:bg-yellow-500/25 text-yellow-400 font-bold text-[11px] duration-150 cursor-pointer"
+                      >
+                        Thay thế ảnh mới (Admin)
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setSelectedPainting(null)}
+                      className="px-6 py-2 rounded-xl bg-yellow-700/30 hover:bg-yellow-700/50 border border-yellow-700/30 text-yellow-300 font-extrabold text-[11px] duration-150 cursor-pointer"
+                    >
+                      Đóng
+                    </button>
                   </div>
                 </div>
               </motion.div>
