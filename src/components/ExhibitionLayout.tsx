@@ -143,7 +143,7 @@ export default function ExhibitionLayout() {
   };
 
   return (
-    <div className="relative min-h-screen lg:h-screen lg:overflow-hidden text-slate-100 flex flex-col overflow-y-auto overflow-x-hidden font-sans select-none selection:bg-amber-500/30">
+    <div className="relative h-screen overflow-hidden text-slate-100 flex flex-col font-sans select-none selection:bg-amber-500/30">
       {/* Background Layer */}
       <ParticleBackground />
 
@@ -157,7 +157,7 @@ export default function ExhibitionLayout() {
       <header className="relative w-full z-40 bg-slate-950/40 backdrop-blur-xl border-b border-white/5 py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Crest & Title */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-white/95 p-[1px] shadow-[0_0_15px_rgba(245,158,11,0.2)] shrink-0 flex items-center justify-center overflow-hidden">
+          <div className="w-12 h-12 shrink-0 flex items-center justify-center">
             <img src="/logo-vwu.png" alt="VWU Logo" className="w-full h-full object-contain" />
           </div>
           <div>
@@ -188,8 +188,8 @@ export default function ExhibitionLayout() {
       </header>
 
       {/* Master Content Layout Section */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-30 min-h-[550px] lg:h-[calc(100vh-180px)]">
-        <div className="col-span-12 h-full">
+      <main className="flex-1 min-h-0 w-full max-w-7xl mx-auto px-4 py-4 relative z-30 flex flex-col">
+        <div className="flex-1 min-h-0 h-full">
           <AnimatePresence mode="wait">
             {activeTab === 'hanh-trinh' ? (
               <motion.section
@@ -528,7 +528,7 @@ export default function ExhibitionLayout() {
                 {selectedNode.title}
               </h3>
 
-              <div className="my-4 rounded-xl overflow-hidden border border-white/10 h-64 bg-slate-950">
+              <div className="my-4 rounded-xl overflow-hidden border border-white/10 h-44 sm:h-64 bg-slate-950">
                 <img 
                   src={selectedNode.photoUrl} 
                   alt={selectedNode.title} 
@@ -577,7 +577,7 @@ export default function ExhibitionLayout() {
                 {selectedArchiveItem.title}
               </h3>
 
-              <div className="my-4 w-full h-44 rounded-xl overflow-hidden bg-slate-950 border border-white/5 flex items-center justify-center relative">
+              <div className="my-4 w-full h-36 sm:h-44 rounded-xl overflow-hidden bg-slate-950 border border-white/5 flex items-center justify-center relative">
                 <img 
                   src={selectedArchiveItem.imageUrl} 
                   alt={selectedArchiveItem.title} 

@@ -56,6 +56,26 @@ const artifactsData: Artifact[] = [
     year: '1945',
     dimensions: 'Văn bản in thô có dấu ấn bút tích sửa đổi',
     source: 'Cục Lưu trữ Văn phòng Trung ương Đảng'
+  },
+  {
+    id: 'art-bac-ho-phu-nu-thu',
+    name: 'Thư gửi Phụ nữ Việt Nam 20/10/1952',
+    category: 'Bác Hồ với Phụ nữ',
+    description: 'Bức thư chúc mừng nhân ngày thành lập Hội Liên hiệp Phụ nữ Việt Nam, Bác Hồ khen ngợi sự đóng góp to lớn của phụ nữ trong kháng chiến kiến quốc, kêu gọi thi đua sản xuất và tiết kiệm.',
+    imgUrl: '/hcm-letter-women.png',
+    year: '1952',
+    dimensions: 'Bản gốc lưu trữ',
+    source: 'Bảo tàng Phụ nữ Việt Nam'
+  },
+  {
+    id: 'art-bac-ho-phu-nu-badamdang',
+    name: 'Bác Hồ với phong trào "Phụ nữ Ba Đảm Đang"',
+    category: 'Bác Hồ với Phụ nữ',
+    description: 'Phong trào thi đua yêu nước xuất sắc của phụ nữ miền Bắc ("Đảm nhiệm sản xuất, Đảm nhiệm gia đình, Đảm nhiệm chiến đấu") được Bác Hồ nhiệt liệt khen ngợi và cổ vũ nồng nhiệt.',
+    imgUrl: '/hcm-women-movement.png',
+    year: '1965',
+    dimensions: 'Tư liệu ảnh',
+    source: 'Bảo tàng Phụ nữ Việt Nam'
   }
 ];
 
@@ -70,7 +90,7 @@ export default function ArchiveGrid({ onItemSelect, selectedItemId }: ArchiveGri
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Categories extraction
-  const categories = ['Tất cả', 'Văn kiện tầm cỡ', 'Công cụ làm việc', 'Kỷ vật sinh hoạt'];
+  const categories = ['Tất cả', 'Văn kiện tầm cỡ', 'Công cụ làm việc', 'Kỷ vật sinh hoạt', 'Bác Hồ với Phụ nữ'];
 
   const filteredArtifacts = artifactsData.filter((art) => {
     const matchesCat = selectedCategoryFilter === 'Tất cả' || art.category === selectedCategoryFilter;

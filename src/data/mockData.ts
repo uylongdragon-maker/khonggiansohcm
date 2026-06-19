@@ -132,5 +132,28 @@ export const ARCHIVE_ITEMS: ArchiveItem[] = [
     tags: ['Thư gửi', 'Giáo dục', 'Thế hệ trẻ', 'Khát vọng'],
     source: 'Bộ Giáo dục và Đào tạo',
     dimensions: 'In báo Cứu Quốc'
+  },
+  {
+    id: 'arch-bac-ho-phu-nu-thu',
+    title: 'Thư gửi Phụ nữ Việt Nam 20/10/1952',
+    category: 'thu-tin',
+    year: '1952',
+    description: 'Bức thư chúc mừng nhân ngày thành lập Hội Liên hiệp Phụ nữ Việt Nam, Bác Hồ khen ngợi sự đóng góp to lớn của phụ nữ trong kháng chiến kiến quốc.',
+    imageUrl: '/hcm-letter-women.png',
+    tags: ['Bác Hồ', 'Phụ nữ', 'Thư gửi', '1952'],
+    source: 'Bảo tàng Phụ nữ Việt Nam',
+    dimensions: 'Bản gốc lưu trữ'
+  },
+  {
+    id: 'arch-bac-ho-phu-nu-badamdang',
+    title: 'Bác Hồ với phong trào "Phụ nữ Ba Đảm Đang"',
+    category: 'sac-lenh',
+    year: '1965',
+    description: 'Phong trào thi đua yêu nước xuất sắc của phụ nữ miền Bắc được Bác Hồ gửi lời khen ngợi và cổ vũ nồng nhiệt.',
+    imageUrl: '/hcm-women-movement.png',
+    tags: ['Kháng chiến', 'Ba Đảm Đang', 'Phụ nữ', '1965'],
+    source: 'Bảo tàng Phụ nữ Việt Nam',
+    dimensions: 'Tư liệu ảnh'
   }
 ];
+

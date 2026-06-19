@@ -215,6 +215,16 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
     let W = canvas.parentElement?.clientWidth || 900;
     let H = canvas.parentElement?.clientHeight || 580;
 
+    // Drag rotation state
+    let theta = 0;
+    let phi = -0.0644;
+    let isPointerDown = false;
+    let isDragging = false;
+    let downX = 0;
+    let downY = 0;
+    let startTheta = 0;
+    let startPhi = 0;
+
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(W, H, false);
@@ -232,7 +242,16 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
     // Camera — cinematic low angle looking up into the space
     const camera = new THREE.PerspectiveCamera(48, W / H, 0.1, 80);
     camera.position.set(0, 4.5, 13.5);
-    camera.lookAt(0, 3.5, -2);
+
+    const updateCamera = () => {
+      const target = new THREE.Vector3(
+        camera.position.x + Math.sin(theta) * Math.cos(phi),
+        camera.position.y + Math.sin(phi),
+        camera.position.z - Math.cos(theta) * Math.cos(phi)
+      );
+      camera.lookAt(target);
+    };
+    updateCamera();
 
     // ═══ LIGHTING — museum well-lit ════════════════════════════════════════
     // Strong ambient base so no surface is pitch black
@@ -635,7 +654,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
     mkPortal(-8.2, -5.5, 'portal-books', 0xd4a030);
     mkPortal( 2.5,  1.8, 'portal-chat',  0x00c87a);
 
-    // ═══ INTERACTION ═══════════════════════════════════════════════════════════
+    // ═══ INTERACTION & DRAG ROTATION ═════════════════════════════════════════════
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const getHit = (cx:number,cy:number) => {
@@ -646,11 +665,13 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
       const hits = raycaster.intersectObjects(interactive);
       return hits.length > 0 ? hits[0].object : null;
     };
+    
     const onMove = (cx:number,cy:number) => {
       const h = getHit(cx,cy);
       canvas.style.cursor = h?.userData?.id ? 'pointer' : 'default';
       setHoveredId(h?.userData?.id ?? null);
     };
+
     const onClickOrTap = (cx:number,cy:number) => {
       const h = getHit(cx,cy); if (!h) return;
       const { id, type } = h.userData;
@@ -665,15 +686,74 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
         if (paint) setSelectedPainting(paint);
       }
     };
-    const onMouseMove = (e:MouseEvent) => onMove(e.clientX, e.clientY);
-    const onTouchMv   = (e:TouchEvent) => { if(e.touches.length) onMove(e.touches[0].clientX,e.touches[0].clientY); };
-    const onClick     = (e:MouseEvent) => onClickOrTap(e.clientX,e.clientY);
-    const onTouchEnd  = (e:TouchEvent) => { if(e.changedTouches.length) onClickOrTap(e.changedTouches[0].clientX,e.changedTouches[0].clientY); };
 
+    const onPointerDown = (clientX: number, clientY: number) => {
+      isPointerDown = true;
+      isDragging = false;
+      downX = clientX;
+      downY = clientY;
+      startTheta = theta;
+      startPhi = phi;
+    };
+
+    const onPointerMove = (clientX: number, clientY: number) => {
+      if (!isPointerDown) return;
+      const dx = clientX - downX;
+      const dy = clientY - downY;
+      if (Math.hypot(dx, dy) > 8) {
+        isDragging = true;
+      }
+      theta = startTheta - dx * 0.004;
+      phi = Math.max(-0.5, Math.min(0.5, startPhi + dy * 0.004));
+      updateCamera();
+    };
+
+    const onPointerUp = (clientX: number, clientY: number) => {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      if (!isDragging) {
+        onClickOrTap(clientX, clientY);
+      }
+      isDragging = false;
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      onPointerDown(e.clientX, e.clientY);
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      onMove(e.clientX, e.clientY);
+      onPointerMove(e.clientX, e.clientY);
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+      onPointerUp(e.clientX, e.clientY);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length) onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length) {
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+        onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (e.changedTouches.length) {
+        onPointerUp(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      }
+    };
+
+    canvas.addEventListener('mousedown', onMouseDown);
     canvas.addEventListener('mousemove', onMouseMove);
-    canvas.addEventListener('click', onClick);
-    canvas.addEventListener('touchmove', onTouchMv, { passive:true });
+    canvas.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: true });
     canvas.addEventListener('touchend', onTouchEnd);
+
     const onResize = () => {
       W = canvas.parentElement?.clientWidth||W; H = canvas.parentElement?.clientHeight||H;
       renderer.setSize(W,H,false); camera.aspect=W/H; camera.updateProjectionMatrix();
@@ -697,9 +777,11 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
+      canvas.removeEventListener('mousedown', onMouseDown);
       canvas.removeEventListener('mousemove', onMouseMove);
-      canvas.removeEventListener('click', onClick);
-      canvas.removeEventListener('touchmove', onTouchMv);
+      canvas.removeEventListener('mouseup', onMouseUp);
+      canvas.removeEventListener('touchstart', onTouchStart);
+      canvas.removeEventListener('touchmove', onTouchMove);
       canvas.removeEventListener('touchend', onTouchEnd);
       
       // Dispose of all geometries and materials in the scene to prevent memory leaks
@@ -747,7 +829,21 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
 
       {/* ── CANVAS ── */}
       <div className="relative w-full flex-1 min-h-0">
-        <canvas ref={canvasRef} className="w-full h-full block outline-none" />
+        <canvas ref={canvasRef} className="w-full h-full block outline-none touch-none" style={{ touchAction: 'none' }} />
+
+        {/* Navigation Tip */}
+        <div className="absolute bottom-4 left-4 pointer-events-none z-10 hidden sm:block">
+          <div className="bg-black/60 backdrop-blur-md border border-yellow-800/30 rounded-xl px-3 py-1.5 shadow-lg text-[10px] text-yellow-200/90 font-medium">
+            💡 Kéo chuột hoặc vuốt màn hình để xoay góc nhìn
+          </div>
+        </div>
+
+        {/* Mobile Navigation Tip */}
+        <div className="absolute bottom-4 left-4 pointer-events-none z-10 sm:hidden">
+          <div className="bg-black/70 backdrop-blur-md border border-yellow-800/40 rounded-xl px-2.5 py-1 shadow-lg text-[9px] text-yellow-200/90 font-medium">
+            💡 Vuốt để xoay góc nhìn
+          </div>
+        </div>
 
         {/* Title */}
         <div className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none z-10">
