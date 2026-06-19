@@ -82,8 +82,8 @@ const PAINTING_SLOTS = [
     description: 'Nhà sàn gỗ đơn sơ của Bác Hồ trong khu di tích Phủ Chủ tịch tại Hà Nội, nơi Người đã sống và làm việc suốt 15 năm cuối đời (1954 - 1969). Ngôi nhà là biểu tượng cao đẹp của lối sống giản dị, thanh tao.'
   },
   { 
-    id: 'p6', title: 'Bác Hồ với Thiếu nhi', color: 0x6b2800, accent: 0x421800, x: 9.45, y: 5.0, z: -3.5, w: 1.85, h: 2.0, rotY: -Math.PI / 2, defaultImage: '/p6.jpg',
-    description: 'Chủ tịch Hồ Chí Minh luôn dành tình thương yêu vô bờ bến cho thế hệ măng non đất nước. Bức ảnh ghi lại nụ cười rạng rỡ và những khoảnh khắc ấm áp của Người bên các cháu thiếu nhi Việt Nam.'
+    id: 'p6', title: 'Bác Hồ với Phụ nữ Việt Nam', color: 0x6b2800, accent: 0x421800, x: 9.45, y: 5.0, z: -3.5, w: 1.85, h: 2.0, rotY: -Math.PI / 2, defaultImage: '/p6.png',
+    description: 'Chủ tịch Hồ Chí Minh luôn dành sự quan tâm sâu sắc và tình cảm ấm áp cho phụ nữ Việt Nam. Bức ảnh ghi lại khoảnh khắc Người gặp gỡ và trò chuyện thân mật cùng các đại biểu phụ nữ Việt Nam, tôn vinh truyền thống anh hùng, bất khuất, trung hậu, đảm đang.'
   },
 ];
 
