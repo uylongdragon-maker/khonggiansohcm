@@ -1,4 +1,4 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -11,14 +11,30 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-// Khởi tạo Firebase App (tránh khởi tạo lại nếu đã tồn tại)
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// Check if firebase config is valid
+const isFirebaseConfigValid = !!firebaseConfig.apiKey;
 
-// Analytics chỉ hoạt động ở phía client (browser)
+let app: FirebaseApp | null = null;
+
+if (isFirebaseConfigValid) {
+  try {
+    app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  } catch (error) {
+    console.error("Failed to initialize Firebase:", error);
+  }
+} else {
+  console.warn("Firebase API key is missing. Analytics will be disabled.");
+}
+
 export const initAnalytics = async () => {
-  const supported = await isSupported();
-  if (supported) {
-    return getAnalytics(app);
+  if (!app) return null;
+  try {
+    const supported = await isSupported();
+    if (supported) {
+      return getAnalytics(app);
+    }
+  } catch (error) {
+    console.error("Failed to initialize Firebase Analytics:", error);
   }
   return null;
 };

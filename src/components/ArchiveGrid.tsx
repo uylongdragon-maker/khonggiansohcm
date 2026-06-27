@@ -22,7 +22,7 @@ const artifactsData: Artifact[] = [
     name: 'Đôi dép cao su lịch sử',
     category: 'Kỷ vật sinh hoạt',
     description: 'Đôi dép cao su huyền thoại được chế tạo thủ công từ chiếc lốp máy bay quân sự từ chiến dịch Thu Đông 1947 quyết tử, đồng hành bền bỉ bên Bác qua vạn dặm đồi núi chiến khu kháng chiến đến cả những chuyến đi hữu nghị đối ngoại quốc tế.',
-    imgUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Ho_Chi_Minh%27s_Sandals_Made_from_Tires_of_Shot-Down_American_Aircraft_%289753799822%29.jpg',
+    imgUrl: '/dep-cao-su.png',
     year: '1947',
     dimensions: 'Kích cỡ chân của Bác, chế tác thủ công',
     source: 'Bảo tàng Hồ Chí Minh'
@@ -32,7 +32,7 @@ const artifactsData: Artifact[] = [
     name: 'Chiếc máy chữ Hermes bẻ đôi',
     category: 'Công cụ làm việc',
     description: 'Chiếc máy chữ hiệu Hermes cầm tay gọn gàng lịch sử được Bác giữ bên mình tự đánh máy trực tiếp các chỉ thị lí luận tối quan trọng của Đảng và Nhà nước Việt Nam tại chiến khu căn cứ địa cũng như khi ở nhà sàn.',
-    imgUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Hermes_Baby_1948.jpg',
+    imgUrl: '/may-chu.png',
     year: 'Thế kỷ XX',
     dimensions: 'Trọng lượng cầm tay di động',
     source: 'Nhà sàn Phủ Chủ tịch'
@@ -42,7 +42,7 @@ const artifactsData: Artifact[] = [
     name: 'Tập thơ Nhật ký trong tù',
     category: 'Văn kiện tầm cỡ',
     description: 'Tác phẩm văn học cách mạng lỗi lạc gồm 133 bài thơ viết bằng chữ Hán giản dị trong thời gian Người bị giam giữ bất hợp pháp tại các nhà tù tỉnh Quảng Tây, Trung Quốc.',
-    imgUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/T%E1%BB%9D_cu%E1%BB%91i_t%E1%BA%ADp_th%C6%A1_Nh%E1%BA%ADt_k%C3%BD_trong_t%C3%B9.jpg',
+    imgUrl: '/nhat-ky-trong-tu.png',
     year: '1942 - 1943',
     dimensions: 'Bút ký gốc chữ Hán sắc sảo',
     source: 'Bảo tàng Lịch sử Quốc gia'
@@ -52,7 +52,7 @@ const artifactsData: Artifact[] = [
     name: 'Bản thảo Tuyên ngôn Độc lập',
     category: 'Văn kiện tầm cỡ',
     description: 'Bản văn kiện pháp lý mang giá trị lập quốc thiêng liêng tuyệt đỉnh khai sinh ra nền độc lập hòa bình cho nhân dân nước Việt Nam Dân chủ Cộng hòa.',
-    imgUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/B%E1%BA%A3n_Tuy%C3%AAn_ng%C3%B4n_%C4%91%E1%BB%99c_l%E1%BA%ADp_c%E1%BB%A7a_n%C6%B0%E1%BB%9Bc_Vi%E1%BB%87t_Nam_D%C3%A2n_ch%E1%BB%A7_C%E1%BB%99ng_h%C3%B2a._-_Trung_t%C3%A2m_L%C6%B0u_tr%E1%BB%AF_qu%E1%BB%91c_gia_III._Ph%C3%B4ng_Ph%E1%BB%A7_Th%E1%BB%A7_t%C6%B0%E1%BB%9Bng%2C_h%E1%BB%93_s%C6%A1_586%2C_t%E1%BB%9D_s%E1%BB%91_1_%E2%80%93_3.jpg',
+    imgUrl: '/p1.jpg',
     year: '1945',
     dimensions: 'Văn bản in thô có dấu ấn bút tích sửa đổi',
     source: 'Cục Lưu trữ Văn phòng Trung ương Đảng'

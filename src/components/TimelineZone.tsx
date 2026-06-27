@@ -21,7 +21,7 @@ const timelineData: TimelineEvent[] = [
     year: '1911',
     title: 'Hành trình tìm đường cứu nước',
     description: 'Người thanh niên Nguyễn Tất Thành rời bến cảng Nhà Rồng trên con tàu Đô đốc Latouche-Tréville, bắt đầu cuộc hành trình vĩ đại tìm lối đi cho độc lập dân tộc.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/C%E1%BA%A3ng_Nh%C3%A0_R%E1%BB%93ng_1920.jpg',
+    image: '/p2.jpg',
     details: 'Ngày 5/6/1911, với tên gọi Anh Ba, người thanh niên yêu nước quyết chí bôn ba muôn nơi để tìm lấy tự do chân chính và giải phóng đồng bào lầm than.',
     category: 'cuu-nuoc'
   },
@@ -30,7 +30,7 @@ const timelineData: TimelineEvent[] = [
     year: '1941',
     title: 'Trở về Tổ Quốc (Pác Bó)',
     description: 'Sau 30 năm bôn ba hải ngoại, Lãnh tụ Nguyễn Ái Quốc trở về nước trực tiếp lãnh đạo phong trào cách mạng tại hang Pác Bó, Cao Bằng.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Pac_Bo_village.jpg',
+    image: '/pac-bo.png',
     details: 'Người sống và làm việc cực nhọc trong hang đá hiểm trở, tự tay đặt tên cho Suối Lê-nin hiền hòa và Núi Các-Mác sừng sững kỳ vĩ.',
     category: 'doc-lap'
   },
@@ -39,7 +39,7 @@ const timelineData: TimelineEvent[] = [
     year: '1945',
     title: 'Tuyên ngôn Độc lập',
     description: 'Tại Quảng trường Ba Đình lịch sử, Chủ tịch Hồ Chí Minh đọc bản Tuyên ngôn Độc lập, khai sinh ra nước Việt Nam Dân chủ Cộng hòa.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/H%C3%ACnh_B%C3%A1c_H%E1%BB%93_%C4%91%E1%BB%8Dc_tuy%C3%AAn_ng%C3%B4n_%C4%91%E1%BB%99c_l%E1%BA%ADp_th%C6%B0%E1%BB%9Dng_%C4%91%C6%B0%E1%BB%A3c_s%E1%BB%AD_d%E1%BB%A5ng_tr%C3%AAn_b%C3%A1o_ch%C3%AD.jpg',
+    image: '/p1.jpg',
     details: 'Bản tuyên ngôn hùng hồn kết tinh khát vọng ngàn năm độc lập vững bền, là mốc son chói lọi trong lịch sử thế kỷ của dân tộc Việt Nam.',
     category: 'doc-lap'
   }

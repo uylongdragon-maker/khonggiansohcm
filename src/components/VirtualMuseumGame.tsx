@@ -12,8 +12,8 @@ interface Cabinet {
   xrayNote: string; infraNote: string;
 }
 interface VirtualMuseumGameProps {
-  onSwitchToBooks?: () => void;
   onOpenChat?: () => void;
+  onSwitchToBooks?: () => void;
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -99,7 +99,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
   useEffect(() => {
     onSwitchToBooksRef.current = onSwitchToBooks;
     onOpenChatRef.current = onOpenChat;
-  }, [onSwitchToBooks, onOpenChat]);
+  }, [onOpenChat]);
 
   const [selectedCabinet, setSelectedCabinet] = useState<Cabinet | null>(null);
   const [selectedPainting, setSelectedPainting] = useState<typeof PAINTING_SLOTS[number] | null>(null);
@@ -279,9 +279,9 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
 
     // ── Ceiling cove lights — bright warm strips ──
     const covePositions = [
-      [-9.2, 9.4, -5], [-9.2, 9.4, 0], [-9.2, 9.4, 5],
-      [9.2, 9.4, -5],  [9.2, 9.4, 0],  [9.2, 9.4, 5],
-      [-4, 9.4, -9.2], [0, 9.4, -9.2], [4, 9.4, -9.2],
+      [-13.2, 9.4, -5], [-13.2, 9.4, 0], [-13.2, 9.4, 5],
+      [13.2, 9.4, -5],  [13.2, 9.4, 0],  [13.2, 9.4, 5],
+      [-8, 9.4, -9.2], [-4, 9.4, -9.2], [0, 9.4, -9.2], [4, 9.4, -9.2], [8, 9.4, -9.2],
     ];
     covePositions.forEach(([x, y, z]) => {
       const pl = new THREE.PointLight(0xffcc88, 4.5, 9, 1.6);
@@ -290,12 +290,12 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
 
     // ── Painting spotlights — sharp theatrical ──
     const paintSpotConfigs = [
-      { pos: [-6.2, 8.8, -5.5],  target: [-6.2, 5.2, -9.5] },
-      { pos: [-1.8, 8.8, -5.5],  target: [-1.8, 5.35,-9.5] },
-      { pos: [ 2.2, 8.8, -5.5],  target: [ 2.2, 5.35,-9.5] },
-      { pos: [ 6.2, 8.8, -5.5],  target: [ 6.2, 5.2, -9.5] },
-      { pos: [-6.2, 8.2, -3.5],  target: [-9.45,5.0, -3.5] },
-      { pos: [ 6.2, 8.2, -3.5],  target: [ 9.45,5.0, -3.5] },
+      { pos: [-9.5, 8.8, -5.5],  target: [-9.5, 5.2, -9.5] },
+      { pos: [-3.2, 8.8, -5.5],  target: [-3.2, 5.35,-9.5] },
+      { pos: [ 3.2, 8.8, -5.5],  target: [ 3.2, 5.35,-9.5] },
+      { pos: [ 9.5, 8.8, -5.5],  target: [ 9.5, 5.2, -9.5] },
+      { pos: [-9.0, 8.2, -3.5],  target: [-13.45,5.0, -3.5] },
+      { pos: [ 9.0, 8.2, -3.5],  target: [ 13.45,5.0, -3.5] },
     ];
     paintSpotConfigs.forEach(({ pos, target }) => {
       const s = new THREE.SpotLight(0xfff5d0, 55, 16, Math.PI / 7.5, 0.5, 1.5);
@@ -313,7 +313,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
     scene.add(heroSpot); scene.add(heroSpot.target);
 
     // Side exhibit spots
-    [[-4.8,-1.5],[4.8,-1.5],[-2.3,1.8]].forEach(([ex,ez]) => {
+    [[-6.5,-1.5],[6.5,-1.5],[-3.2,1.8]].forEach(([ex,ez]) => {
       const sp = new THREE.SpotLight(0xfff4dc, 60, 12, Math.PI/7, 0.55, 1.4);
       sp.position.set(ex, 9, ez+1); sp.target.position.set(ex, 1.5, ez);
       scene.add(sp); scene.add(sp.target);
@@ -413,7 +413,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
     // ── Architectural columns — fluted marble ──
     const colMat = new THREE.MeshStandardMaterial({ color: 0x1c2236, roughness: 0.5, metalness: 0.12 });
     const colCapMat = new THREE.MeshStandardMaterial({ color: 0x96793a, roughness: 0.28, metalness: 0.72 });
-    const colPositions = [[-7, -8.5], [-7, 3.5], [7, -8.5], [7, 3.5]];
+    const colPositions = [[-10, -8.5], [-10, 3.5], [10, -8.5], [10, 3.5]];
     colPositions.forEach(([cx, cz]) => {
       // Shaft — octagonal for that classical feel
       const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.35, 9.4, 8), colMat);
@@ -431,7 +431,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
 
     // ── Decorative wall sconces between paintings ──
     const sconceMat = new THREE.MeshStandardMaterial({ color: 0xd4a030, roughness: 0.22, metalness: 0.9, emissive: 0xffd060, emissiveIntensity: 0.35 });
-    [-8.5, -4.2, 0, 4.2, 8.5].forEach(sx => {
+    [-12, -6, 0, 6, 12].forEach(sx => {
       const s = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.35, 0.25), sconceMat);
       s.position.set(sx, 7.5, -9.7); scene.add(s);
       const pl = new THREE.PointLight(0xffd080, 2.5, 3.5, 2);
@@ -651,7 +651,6 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
       gl.position.set(0, 2.2, 0.8); g.add(gl);
       g.position.set(x,0,z); scene.add(g);
     };
-    mkPortal(-8.2, -5.5, 'portal-books', 0xd4a030);
     mkPortal( 2.5,  1.8, 'portal-chat',  0x00c87a);
 
     // ═══ INTERACTION & DRAG ROTATION ═════════════════════════════════════════════
@@ -817,7 +816,7 @@ export default function VirtualMuseumGame({ onSwitchToBooks, onOpenChat }: Virtu
 
   const hoveredPainting = PAINTING_SLOTS.find(p => p.id === hoveredId);
   const hoveredCabinet  = DEFAULT_CABINETS.find(c => c.id === hoveredId);
-  const portalLabel: Record<string,string> = { 'portal-books':'Thư viện Di sản', 'portal-chat':'Hướng dẫn viên AI' };
+  const portalLabel: Record<string,string> = { 'portal-chat':'Hướng dẫn viên AI' };
 
   // ═════════════════════════════════════════════════════════════════════════════
   return (

@@ -187,242 +187,215 @@ export default function ExhibitionLayout() {
         </div>
       </header>
 
-      {/* Master Content Layout Section */}
       <main className="flex-1 min-h-0 w-full max-w-7xl mx-auto px-4 py-4 relative z-30 flex flex-col">
         <div className="flex-1 min-h-0 h-full">
-          <AnimatePresence mode="wait">
-            {activeTab === 'hanh-trinh' ? (
-              <motion.section
-                key="hanh-trinh"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.25, ease: "easeInOut" }}
-                className="bg-slate-950/40 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col h-full w-full"
+          <section className="flex flex-col h-full w-full gap-4">
+            {/* Sub-tab selection indicator to switch view in central core */}
+            <div className="flex bg-slate-950/90 p-1.5 rounded-full border border-white/10 shrink-0 font-bold tracking-wider max-w-md w-full mx-auto shadow-inner">
+              <button 
+                onClick={() => setCenterViewMode('3d')}
+                className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
+                  centerViewMode === '3d' 
+                    ? 'bg-amber-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.6)]' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
               >
-                <TimelineZone 
-                  onNodeSelect={(node) => setSelectedNode(node)} 
-                  selectedNodeId={selectedNode?.id} 
-                />
-              </motion.section>
-            ) : (
-              <motion.section
-                key="tuong-tac"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.25, ease: "easeInOut" }}
-                className="flex flex-col h-full w-full gap-4"
+                MẪU VẬT DI SẢN
+              </button>
+              <button 
+                onClick={() => setCenterViewMode('books')}
+                className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
+                  centerViewMode === 'books' 
+                    ? 'bg-amber-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.6)]' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
               >
-                {/* Sub-tab selection indicator to switch view in central core */}
-                <div className="flex bg-slate-950/90 p-1.5 rounded-full border border-white/10 shrink-0 font-bold tracking-wider max-w-md w-full mx-auto shadow-inner">
-                  <button 
-                    onClick={() => setCenterViewMode('3d')}
-                    className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
-                      centerViewMode === '3d' 
-                        ? 'bg-amber-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.6)]' 
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    MẪU VẬT DI SẢN
-                  </button>
-                  <button 
-                    onClick={() => setCenterViewMode('books')}
-                    className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
-                      centerViewMode === 'books' 
-                        ? 'bg-amber-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.6)]' 
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    TỦ SÁCH DI SẢN
-                  </button>
-                  <button 
-                    onClick={() => setCenterViewMode('plaquet')}
-                    className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
-                      centerViewMode === 'plaquet' 
-                        ? 'bg-amber-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.6)]' 
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    BẢN TIN
-                  </button>
-                </div>
+                TỦ SÁCH DI SẢN
+              </button>
+              <button 
+                onClick={() => setCenterViewMode('plaquet')}
+                className={`flex-1 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.1em] transition-all duration-300 cursor-pointer ${
+                  centerViewMode === 'plaquet' 
+                    ? 'bg-amber-500 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.6)]' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                BẢN TIN
+              </button>
+            </div>
 
-                <div className="flex-1 min-h-0 relative">
-                  <AnimatePresence mode="wait">
-                    {centerViewMode === '3d' ? (
-                      <motion.div
-                        key="3d"
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
-                        className="w-full h-full"
-                      >
-                        <VirtualMuseumGame 
-                          onSwitchToBooks={handleSwitchToBooks}
-                          onOpenChat={handleOpenChat}
-                        />
-                      </motion.div>
-                    ) : centerViewMode === 'books' ? (
-                      <motion.div
-                        key="books"
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
-                        className="w-full h-full bg-slate-950/40 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col overflow-y-auto"
-                      >
-                        <ArchiveGrid 
-                          onItemSelect={(item) => setSelectedArchiveItem(item)}
-                          selectedItemId={selectedArchiveItem?.id}
-                        />
-                      </motion.div>
-                    ) : (
-                      /* Central Glassmorphic Portal Welcome Box */
-                      <motion.div
-                        key="plaquet"
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
-                        className="w-full h-full backdrop-blur-md bg-white/5 border border-white/15 rounded-2xl p-6 flex flex-col items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.5)] overflow-y-auto custom-scrollbar text-center relative group max-w-2xl mx-auto"
-                      >
-                        {/* Header typography inside glass panel */}
-                        <div className="w-full">
-                          <h2 className="text-[10px] md:text-xs uppercase tracking-[0.6em] text-amber-400 font-bold mb-3">Triển Lãm Kỹ Thuật Số</h2>
-                          <h1 className="text-2xl md:text-3.5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
-                            KHÔNG GIAN VĂN HÓA<br/>
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 font-extrabold tracking-wide uppercase">HỒ CHÍ MINH</span>
-                          </h1>
-                          <div className="h-[1px] w-16 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mx-auto mt-2" />
-                        </div>
+            <div className="flex-1 min-h-0 relative">
+              <AnimatePresence mode="wait">
+                {centerViewMode === '3d' ? (
+                  <motion.div
+                    key="3d"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full h-full"
+                  >
+                    <VirtualMuseumGame 
+                      onOpenChat={handleOpenChat}
+                    />
+                  </motion.div>
+                ) : centerViewMode === 'books' ? (
+                  <motion.div
+                    key="books"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full h-full bg-slate-950/40 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col overflow-y-auto"
+                  >
+                    <ArchiveGrid 
+                      onItemSelect={(item) => setSelectedArchiveItem(item)}
+                      selectedItemId={selectedArchiveItem?.id}
+                    />
+                  </motion.div>
+                ) : (
+                  /* Central Glassmorphic Portal Welcome Box */
+                  <motion.div
+                    key="plaquet"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full h-full backdrop-blur-md bg-white/5 border border-white/15 rounded-2xl p-6 flex flex-col items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.5)] overflow-y-auto custom-scrollbar text-center relative group max-w-2xl mx-auto"
+                  >
+                    {/* Header typography inside glass panel */}
+                    <div className="w-full">
+                      <h2 className="text-[10px] md:text-xs uppercase tracking-[0.6em] text-amber-400 font-bold mb-3">Triển Lãm Kỹ Thuật Số</h2>
+                      <h1 className="text-2xl md:text-3.5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+                        KHÔNG GIAN VĂN HÓA<br/>
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 font-extrabold tracking-wide uppercase">HỒ CHÍ MINH</span>
+                      </h1>
+                      <div className="h-[1px] w-16 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mx-auto mt-2" />
+                    </div>
 
-                        {/* EMBOSSED BRONZE RELIEF PLAQUE (with mouse dynamic tracking light mimicking copper metallic response) */}
+                    {/* EMBOSSED BRONZE RELIEF PLAQUE (with mouse dynamic tracking light mimicking copper metallic response) */}
+                    <div 
+                      ref={plaqueRef}
+                      onMouseMove={handleMouseMovePlaque}
+                      onMouseLeave={handleMouseLeavePlaque}
+                      className="my-4 relative w-40 h-40 md:w-44 md:h-44 rounded-full p-[3px] shadow-[0_15px_30px_rgba(0,0,0,0.6)] cursor-crosshair shrink-0 transition-transform duration-300 hover:scale-[1.05]"
+                      style={{
+                        background: `conic-gradient(from 180deg at 50% 50%, #d97706, #b45309, #78350f, #b45309, #f59e0b, #d97706)`
+                      }}
+                    >
+                      {/* Inner bronze metal face */}
+                      <div 
+                        className="w-full h-full rounded-full flex flex-col items-center justify-center p-2 relative overflow-hidden transition-all duration-300"
+                        style={{
+                          background: `radial-gradient(circle at ${plaqueLight.x}% ${plaqueLight.y}%, #b45309 0%, #78350f 65%, #451a03 100%)`
+                        }}
+                      >
+                        {/* Dynamic specular lighting gleam */}
                         <div 
-                          ref={plaqueRef}
-                          onMouseMove={handleMouseMovePlaque}
-                          onMouseLeave={handleMouseLeavePlaque}
-                          className="my-4 relative w-40 h-40 md:w-44 md:h-44 rounded-full p-[3px] shadow-[0_15px_30px_rgba(0,0,0,0.6)] cursor-crosshair shrink-0 transition-transform duration-300 hover:scale-[1.05]"
+                          className="absolute inset-0 pointer-events-none opacity-40 mix-blend-color-dodge transition-all duration-300"
                           style={{
-                            background: `conic-gradient(from 180deg at 50% 50%, #d97706, #b45309, #78350f, #b45309, #f59e0b, #d97706)`
+                            background: `radial-gradient(circle 80px at ${plaqueLight.x}% ${plaqueLight.y}%, rgba(251, 191, 36, 0.4) 0%, transparent 100%)`
                           }}
-                        >
-                          {/* Inner bronze metal face */}
-                          <div 
-                            className="w-full h-full rounded-full flex flex-col items-center justify-center p-2 relative overflow-hidden transition-all duration-300"
-                            style={{
-                              background: `radial-gradient(circle at ${plaqueLight.x}% ${plaqueLight.y}%, #b45309 0%, #78350f 65%, #451a03 100%)`
-                            }}
-                          >
-                            {/* Dynamic specular lighting gleam */}
-                            <div 
-                              className="absolute inset-0 pointer-events-none opacity-40 mix-blend-color-dodge transition-all duration-300"
-                              style={{
-                                background: `radial-gradient(circle 80px at ${plaqueLight.x}% ${plaqueLight.y}%, rgba(251, 191, 36, 0.4) 0%, transparent 100%)`
-                              }}
+                        />
+
+                        {/* Fine circular rim marks */}
+                        <div className="absolute inset-2 border border-amber-600/40 rounded-full pointer-events-none" />
+                        <div className="absolute inset-3 border border-amber-500/20 rounded-full pointer-events-none" />
+
+                        {/* EMBOSSED PORTRAIT VECTOR REPRESENTATION (Beautiful detailed gold silhouette in high-contrast) */}
+                        <div className="relative z-10 flex flex-col items-center justify-center select-none">
+                          {/* Highly polished dynamic gold embossed layout of President Ho Chi Minh */}
+                          <svg viewBox="0 0 100 100" className="w-24 h-24 text-amber-300 filter drop-shadow-[1px_2px_4px_rgba(0,0,0,0.9)] opacity-90 transition-transform duration-300 group-hover:scale-102">
+                            {/* Circle base */}
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(245, 158, 11, 0.15)" strokeWidth="1" />
+                            {/* Outer star motif representing National Flag & guidance */}
+                            <polygon points="50,12 53,24 65,24 55,31 59,43 50,35 41,43 45,31 35,24 47,24" fill="rgba(245, 158, 11, 0.08)" />
+                            
+                            {/* Portrait Embossed Line Art (Respectful, iconic silhouette lines of Uncle Ho) */}
+                            <path 
+                              d="M 50,22 
+                                 C 52,22 54,23 54.5,25 
+                                 C 55,27 55,30 53,32 
+                                 C 51,34 49,36 49.5,38 
+                                 C 50,40 52.5,39.5 53.5,41 
+                                 C 54.5,42.5 54,45 52,47 
+                                 C 50,49 46.5,49 45,51 
+                                 C 43.5,53 43.5,56 42.5,58 
+                                 C 41.5,60 38.5,62 37,65
+                                 C 35.5,68 34,72 34,75" 
+                              fill="none" 
+                              stroke="#fbbf24" 
+                              strokeWidth="2.5" 
+                              strokeLinecap="round" 
+                              className="transition-all"
                             />
-
-                            {/* Fine circular rim marks */}
-                            <div className="absolute inset-2 border border-amber-600/40 rounded-full pointer-events-none" />
-                            <div className="absolute inset-3 border border-amber-500/20 rounded-full pointer-events-none" />
-
-                            {/* EMBOSSED PORTRAIT VECTOR REPRESENTATION (Beautiful detailed gold silhouette in high-contrast) */}
-                            <div className="relative z-10 flex flex-col items-center justify-center select-none">
-                              {/* Highly polished dynamic gold embossed layout of President Ho Chi Minh */}
-                              <svg viewBox="0 0 100 100" className="w-24 h-24 text-amber-300 filter drop-shadow-[1px_2px_4px_rgba(0,0,0,0.9)] opacity-90 transition-transform duration-300 group-hover:scale-102">
-                                {/* Circle base */}
-                                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(245, 158, 11, 0.15)" strokeWidth="1" />
-                                {/* Outer star motif representing National Flag & guidance */}
-                                <polygon points="50,12 53,24 65,24 55,31 59,43 50,35 41,43 45,31 35,24 47,24" fill="rgba(245, 158, 11, 0.08)" />
-                                
-                                {/* Portrait Embossed Line Art (Respectful, iconic silhouette lines of Uncle Ho) */}
-                                <path 
-                                  d="M 50,22 
-                                     C 52,22 54,23 54.5,25 
-                                     C 55,27 55,30 53,32 
-                                     C 51,34 49,36 49.5,38 
-                                     C 50,40 52.5,39.5 53.5,41 
-                                     C 54.5,42.5 54,45 52,47 
-                                     C 50,49 46.5,49 45,51 
-                                     C 43.5,53 43.5,56 42.5,58 
-                                     C 41.5,60 38.5,62 37,65
-                                     C 35.5,68 34,72 34,75" 
-                                  fill="none" 
-                                  stroke="#fbbf24" 
-                                  strokeWidth="2.5" 
-                                  strokeLinecap="round" 
-                                  className="transition-all"
-                                />
-                                
-                                {/* Gentle face, eye brow and beard line representation */}
-                                <path 
-                                  d="M 44.5,33 C 45.2,34.5 46.8,35.2 48,35" 
-                                  fill="none" 
-                                  stroke="#fcd34d" 
-                                  strokeWidth="1.5" 
-                                  strokeLinecap="round" 
-                                />
-                                {/* Beard contours */}
-                                <path 
-                                  d="M 49.5,43 L 50,56 M 48,44 L 46.5,54 M 51.5,44 L 54,55 M 50,47 L 49,58 M 50.5,50 L 52,57" 
-                                  fill="none" 
-                                  stroke="#fef08a" 
-                                  strokeWidth="1.8" 
-                                  strokeLinecap="round" 
-                                />
-                                {/* Base dress suit collar */}
-                                <path 
-                                  d="M 34,75 C 38,72 43,71 45.5,74 C 47,76 47,79 48,81 M 48.5,73 C 50.5,71 52.5,70 54,72" 
-                                  fill="none" 
-                                  stroke="#f59e0b" 
-                                  strokeWidth="2" 
-                                  strokeLinecap="round" 
-                                />
-                              </svg>
-                              
-                              {/* Small gold label at the bottom rim of the circular plaque */}
-                              <div className="mt-1 text-[8px] font-sans font-bold tracking-widest text-amber-200/80 uppercase">
-                                CHỦ TỊCH HỒ CHÍ MINH
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Subtitle/Tooltip under medallion */}
-                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-amber-950/80 border border-amber-500/30 px-2 py-0.5 rounded text-[8px] font-mono text-amber-300 uppercase whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Hiệu ứng ánh sáng chạm xoay
+                            
+                            {/* Gentle face, eye brow and beard line representation */}
+                            <path 
+                              d="M 44.5,33 C 45.2,34.5 46.8,35.2 48,35" 
+                              fill="none" 
+                              stroke="#fcd34d" 
+                              strokeWidth="1.5" 
+                              strokeLinecap="round" 
+                            />
+                            {/* Beard contours */}
+                            <path 
+                              d="M 49.5,43 L 50,56 M 48,44 L 46.5,54 M 51.5,44 L 54,55 M 50,47 L 49,58 M 50.5,50 L 52,57" 
+                              fill="none" 
+                              stroke="#fef08a" 
+                              strokeWidth="1.8" 
+                              strokeLinecap="round" 
+                            />
+                            {/* Base dress suit collar */}
+                            <path 
+                              d="M 34,75 C 38,72 43,71 45.5,74 C 47,76 47,79 48,81 M 48.5,73 C 50.5,71 52.5,70 54,72" 
+                              fill="none" 
+                              stroke="#f59e0b" 
+                              strokeWidth="2" 
+                              strokeLinecap="round" 
+                            />
+                          </svg>
+                          
+                          {/* Small gold label at the bottom rim of the circular plaque */}
+                          <div className="mt-1 text-[8px] font-sans font-bold tracking-widest text-amber-200/80 uppercase">
+                            CHỦ TỊCH HỒ CHÍ MINH
                           </div>
                         </div>
+                      </div>
 
-                        {/* Core quote block */}
-                        <div className="bg-slate-900/60 border border-white/5 rounded-xl p-3 text-left w-full mt-2 relative">
-                          <Quote className="w-5 h-5 text-amber-400/30 absolute left-2 top-2" />
-                          <p className="text-[11px] italic text-amber-100 leading-relaxed pl-5 font-sans">
-                            "Tôi chỉ có một sự ham muốn, ham muốn tột bậc, là làm sao cho nước ta được hoàn toàn độc lập, dân ta được hoàn toàn tự do, đồng bào ai cũng có cơm ăn áo mặc, ai cũng được học hành."
-                          </p>
-                          <div className="text-right text-[10px] text-amber-400 font-bold mt-1.5 font-mono">
-                            — Hồ Chí Minh
-                          </div>
-                        </div>
+                      {/* Subtitle/Tooltip under medallion */}
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-amber-950/80 border border-amber-500/30 px-2 py-0.5 rounded text-[8px] font-mono text-amber-300 uppercase whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        Hiệu ứng ánh sáng chạm xoay
+                      </div>
+                    </div>
 
-                        {/* Quick stats or summary */}
-                        <div className="w-full grid grid-cols-2 gap-2 text-left mt-3">
-                          <div className="bg-white/5 rounded-xl p-2.5 border border-white/5 text-center">
-                            <div className="text-base font-mono font-bold text-amber-300">30 NĂM</div>
-                            <div className="text-[9px] text-slate-400">Bôn ba tìm lối cứu Tổ quốc</div>
-                          </div>
-                          <div className="bg-white/5 rounded-xl p-2.5 border border-white/5 text-center">
-                            <div className="text-base font-mono font-bold text-amber-300">BẢO VẬT</div>
-                            <div className="text-[9px] text-slate-400">Quốc gia tư liệu lưu truyền</div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.section>
-            )}
-          </AnimatePresence>
+                    {/* Core quote block */}
+                    <div className="bg-slate-900/60 border border-white/5 rounded-xl p-3 text-left w-full mt-2 relative">
+                      <Quote className="w-5 h-5 text-amber-400/30 absolute left-2 top-2" />
+                      <p className="text-[11px] italic text-amber-100 leading-relaxed pl-5 font-sans">
+                        "Tôi chỉ có một sự ham muốn, ham muốn tột bậc, là làm sao cho nước ta được hoàn toàn độc lập, dân ta được hoàn toàn tự do, đồng bào ai cũng có cơm ăn áo mặc, ai cũng được học hành."
+                      </p>
+                      <div className="text-right text-[10px] text-amber-400 font-bold mt-1.5 font-mono">
+                        — Hồ Chí Minh
+                      </div>
+                    </div>
+
+                    {/* Quick stats or summary */}
+                    <div className="w-full grid grid-cols-2 gap-2 text-left mt-3">
+                      <div className="bg-white/5 rounded-xl p-2.5 border border-white/5 text-center">
+                        <div className="text-base font-mono font-bold text-amber-300">30 NĂM</div>
+                        <div className="text-[9px] text-slate-400">Bôn ba tìm lối cứu Tổ quốc</div>
+                      </div>
+                      <div className="bg-white/5 rounded-xl p-2.5 border border-white/5 text-center">
+                        <div className="text-base font-mono font-bold text-amber-300">BẢO VẬT</div>
+                        <div className="text-[9px] text-slate-400">Quốc gia tư liệu lưu truyền</div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </section>
         </div>
       </main>
 
@@ -622,40 +595,9 @@ export default function ExhibitionLayout() {
 
       {/* FOOTER NAVIGATION MENU */}
       <footer className="relative w-full z-40 bg-slate-950/50 backdrop-blur-xl border-t border-white/5 py-4 px-6 flex flex-col items-center gap-3 mt-auto shadow-2xl">
-        <div className="flex bg-slate-900/60 p-1 rounded-full border border-white/10 max-w-md w-full justify-between shadow-xl">
-          {[
-            { id: 'hanh-trinh', label: 'THEO DẤU CHÂN BÁC', icon: Clock },
-            { id: 'tuong-tac', label: 'KHÔNG GIAN VĂN HÓA', icon: Compass },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-
-            return (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id as any);
-                  // Quick auto selection reset
-                  setSelectedNode(null);
-                  setSelectedArchiveItem(null);
-                }}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-full text-[10px] md:text-xs font-bold tracking-wider transition-all duration-300 transform cursor-pointer border ${
-                  isActive
-                    ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.5)] scale-[1.03]'
-                    : 'bg-transparent border-transparent text-slate-300 hover:text-white hover:bg-white/5 hover:shadow-[0_0_12px_rgba(255,255,255,0.06)]'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'animate-pulse' : ''}`} />
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
-              </button>
-            );
-          })}
-        </div>
-        
         {/* Footnote attribution requested by user */}
         <div className="text-[10px] md:text-xs text-amber-500/80 font-sans tracking-wide text-center uppercase font-medium">
-          Thực hiện bởi hội liên hiệp hội phụ nữ phường bình đông
+          Thực hiện bởi Hội Liên Hiệp Phụ Nữ Phường Bình Đông
         </div>
       </footer>
 
